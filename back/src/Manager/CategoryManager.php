@@ -3,17 +3,19 @@
 namespace App\Manager;
 
 
-
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
 class CategoryManager
 {
     private EntityManagerInterface $entityManager;
+    private EntityRepository $repository;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->repository = $entityManager->getRepository(Category::class);
     }
 
     public function create(string $name): Category
@@ -25,9 +27,14 @@ class CategoryManager
         return $category;
     }
 
-    public function getAllCategory(): array
+    public function getAll(): array
     {
-        $repository = $this->entityManager->getRepository(Category::class);
-        return $repository->findAll();
+        return $this->repository->findAll();
+    }
+
+    public function getOrCreate(string $name)
+    {
+        $category = $this->repository->findBy(['name', $name]);
+        return $category ?: $this->create($name);
     }
 }
