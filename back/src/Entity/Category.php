@@ -21,9 +21,11 @@ class Category
     private string $name;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
+    #[ORM\PrePersist]
     private DateTime $createdAt;
 
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
+    #[ORM\PreUpdate]
     private DateTime $updatedAt;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'Product')]
@@ -75,12 +77,9 @@ class Category
         return $this->createdAt;
     }
 
-    /**
-     * @param DateTime $createdAt
-     */
-    public function setCreatedAt(DateTime $createdAt): void
+    public function setCreatedAt(): void
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTime();
     }
 
     /**
@@ -91,12 +90,9 @@ class Category
         return $this->updatedAt;
     }
 
-    /**
-     * @param DateTime $updatedAt
-     */
-    public function setUpdatedAt(DateTime $updatedAt): void
+    public function setUpdatedAt(): void
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new DateTime();
     }
 
     /**
