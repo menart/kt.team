@@ -6,17 +6,14 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 
 class ProductManager
 {
     private EntityManagerInterface $entityManager;
-    private ProductRepository $repository;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->repository = $entityManager->getRepository(Product::class);
     }
 
     public function create(string $name, string $description, int $weight, Category $category): Product
@@ -31,8 +28,15 @@ class ProductManager
         return $product;
     }
 
-    public function getProducts(int $page, int $perPage): array
+    /**
+     * @param int $page
+     * @param int $perPage
+     * @return Product[]
+     */
+    public function getProducts(int $page = 0, int $perPage = 20): array
     {
-        return $this->repository->getProducts($page, $perPage);
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->entityManager->getRepository(Product::class);
+        return $productRepository->getProducts($page, $perPage);
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
+use App\Repository\ProductRepository;
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Index(columns: ['name'], name: 'product_name_idx')]
 #[ORM\Index(columns: ['category_id'], name: 'product_category_id_idx')]
 #[ORM\HasLifecycleCallbacks]
@@ -28,11 +28,9 @@ class Product
     private string $weight;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
-    #[ORM\PrePersist]
     private DateTime $createdAt;
 
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
-    #[ORM\PreUpdate]
     private DateTime $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: 'Category', inversedBy: 'products')]
@@ -111,6 +109,7 @@ class Product
         return $this->createdAt;
     }
 
+    #[ORM\PrePersist]
     public function setCreatedAt(): void
     {
         $this->createdAt = new DateTime();
@@ -124,6 +123,8 @@ class Product
         return $this->updatedAt;
     }
 
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function setUpdatedAt(): void
     {
         $this->updatedAt = new DateTime();
