@@ -28,11 +28,15 @@ class ProductController extends AbstractController
         $page = $request->get('page') ?? 0;
         $perPage = $request->get('per-page') ?? 20;
         $filterDto = new FilterDto();
-        $filter = json_decode($request->get('filter'));
+        $filter = json_decode($request->get('filter') ?? '[]');
+        $filterDto->weightMin = $filter->weightMin ?? 0;
+        $filterDto->weightMax = $filter->weightMax ?? 0;
+        $filterDto->category = $filter->category ?? [];
+        $filterDto->query = $request->get('query');
         return $this->render('product.twig',
             [
                 'title' => 'product',
-                'rows' => $this->productManager->getProducts($page, $perPage),
+                'rows' => $this->productManager->getProducts($page, $perPage, $filterDto),
                 'categories' => $this->categoryManager->getAll(),
                 'page' => $page,
                 'perPage' => $perPage,

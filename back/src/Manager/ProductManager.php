@@ -2,9 +2,11 @@
 
 namespace App\Manager;
 
+use App\Dto\FilterDto;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProductManager
@@ -36,9 +38,26 @@ class ProductManager
      * @param int $perPage
      * @return Product[]
      */
-    public function getProducts(int $page, int $perPage): array
+    public function getProducts(int $page, int $perPage, FilterDto $filter): array
     {
-        return $this->productRepository->findBy([], [], $perPage, $page * $perPage);
+        $expr = Criteria::expr();
+
+        $criteria = Criteria::create();
+        if ($filter->weightMin > 0) {
+            $criteria->andWhere($expr->gte('weight', $filter->weightMin));
+        }
+        if ($filter->weightMax > 0) {
+            $criteria->andWhere($expr->lte('weight', $filter->weightMax));
+        }
+        if (strlen(trim($filter->query)) > 0) {
+            $criteria->andWhere($expr->contains('name', $filter->query));
+        }
+        if (count($filter->category) > 0) {
+            $criteria->andWhere($expr->in('category', $filter->category));
+        }
+        $criteria->setFirstResult($page * $perPage);
+        $criteria->setMaxResults($perPage);
+        return $this->productRepository->matching($criteria)->getValues();
     }
 
     public function getCountPage(int $perPage): int
