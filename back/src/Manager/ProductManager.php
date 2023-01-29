@@ -33,10 +33,18 @@ class ProductManager
      * @param int $perPage
      * @return Product[]
      */
-    public function getProducts(int $page = 0, int $perPage = 20): array
+    public function getProducts(int $page, int $perPage): array
     {
         /** @var ProductRepository $productRepository */
         $productRepository = $this->entityManager->getRepository(Product::class);
         return $productRepository->getProducts($page, $perPage);
+    }
+
+    public function getCountPage(int $perPage): int
+    {
+        if ($perPage === 0) return 0;
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->entityManager->getRepository(Product::class);
+        return ceil($productRepository->getCountProducts() / $perPage);
     }
 }

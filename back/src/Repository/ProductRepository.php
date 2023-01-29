@@ -22,4 +22,15 @@ class ProductRepository extends EntityRepository
             ->setMaxResults($perPage);
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * @return int
+     */
+    public function getCountProducts(): int
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select($queryBuilder->expr()->count('p'))
+            ->from($this->getClassName(), 'p');
+        return $queryBuilder->getQuery()->getFirstResult();
+    }
 }

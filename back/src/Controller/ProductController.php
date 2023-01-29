@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Manager\ProductManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,12 +19,17 @@ class ProductController extends AbstractController
     }
 
     #[Route(path: '', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $page = $request->request->get('page') ?? 0;
+        $perPage = $request->request->get('per-page') ?? 20;
         return $this->render('product.twig',
             [
                 'title' => 'product',
-                'rows' => $this->productManager->getProducts()
+                'rows' => $this->productManager->getProducts($page, $perPage),
+                'page' => $page,
+                'perPage' => $perPage,
+                'pageCount' => $this->productManager->getCountPage($perPage)
             ]);
     }
 }
