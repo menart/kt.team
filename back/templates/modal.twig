@@ -1,24 +1,26 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="weightModal" tabindex="-1" aria-labelledby="weightModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Фильтр веса</h5>
+                <h5 class="modal-title" id="weightModalLabel">Фильтр веса</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col">
-                        <input type="number" class="form-control" placeholder="Вес от" aria-label="Вес от">
+                        <input type="number" class="form-control" placeholder="Вес от" aria-label="Вес от"
+                               value="{{ filter.minWeight ?? 0}}" id="input-min-weight">
                     </div>
                     -
                     <div class="col">
-                        <input type="number" class="form-control" placeholder="Вес до" aria-label="Вес до">
+                        <input type="number" class="form-control" placeholder="Вес до" aria-label="Вес до"
+                               value="{{ filter.maxWeight ?? 0 }}" id="input-max-weight">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Задать фильтр</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btn-set-weight">Задать фильтр</button>
             </div>
         </div>
     </div>

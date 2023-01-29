@@ -5,9 +5,12 @@
     </div>
     <div class="offcanvas-body">
         <ul class="list-group">
-            <li class="list-group-item btn btn-light active">Все</li>
+            <li class="list-group-item btn btn-light {% if filter.category is empty %} active{% endif %} li-category"
+                id="all-category">Все
+            </li>
             {% for category in categories %}
-            <li class="list-group-item btn btn-light">{{ category.name }}</li>
+                <li class="list-group-item btn btn-light {% if category.id in filter.category %} active{% endif %} li-category"
+                    data-id="{{ category.id }}">{{ category.name }}</li>
             {% endfor %}
         </ul>
     </div>

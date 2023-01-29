@@ -1,0 +1,24 @@
+<script>
+    let btnSetWeight = document.getElementById('btn-set-weight');
+    btnSetWeight.addEventListener('click', () => {
+        filterParam.weightMin = document.getElementById('input-min-weight').value;
+        filterParam.weightMax = document.getElementById('input-max-weight').value;
+    });
+    let liCategories = document.querySelectorAll('.li-category');
+    liCategories.forEach(liCategory => liCategory.addEventListener('click', () => {
+            liCategory.classList.toggle('active');
+            let id = Number(liCategory.dataset.id);
+            let index = filterParam.category.indexOf(id);
+            if (index < 0) {
+                filterParam.category.push(id);
+            } else {
+                filterParam.category.splice(index, 1);
+            }
+            if (filterParam.category.length == 0) {
+                document.getElementById('all-category').classList.add('active');
+            }else{
+                document.getElementById('all-category').classList.remove('active');
+            }
+        })
+    );
+</script>

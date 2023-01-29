@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\FilterDto;
 use App\Manager\CategoryManager;
 use App\Manager\ProductManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,7 @@ class ProductController extends AbstractController
     {
         $page = $request->request->get('page') ?? 0;
         $perPage = $request->request->get('per-page') ?? 20;
+        $filter = new FilterDto();
         return $this->render('product.twig',
             [
                 'title' => 'product',
@@ -33,7 +35,8 @@ class ProductController extends AbstractController
                 'categories' => $this->categoryManager->getAll(),
                 'page' => $page,
                 'perPage' => $perPage,
-                'pageCount' => $this->productManager->getCountPage($perPage)
+                'pageCount' => $this->productManager->getCountPage($perPage),
+                'filter' => $filter,
             ]);
     }
 }
