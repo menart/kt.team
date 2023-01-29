@@ -8,7 +8,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+                   aria-controls="offcanvasExample">
                     Выбрать категорию
                 </a>
                 <li class="nav-item dropdown primary">
@@ -17,9 +18,10 @@
                         Количество записей на странице
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">10</a></li>
-                        <li><a class="dropdown-item" href="#">20</a></li>
-                        <li><a class="dropdown-item" href="#">50</a></li>
+                        {% for countPerPage in [10,20,50] %}
+                            <li><a class="dropdown-item {% if perPage == countPerPage %} active {% endif %}"
+                                   href="#">{{ countPerPage }}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">

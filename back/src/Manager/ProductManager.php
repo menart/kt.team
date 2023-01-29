@@ -10,10 +10,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class ProductManager
 {
     private EntityManagerInterface $entityManager;
+    private ProductRepository $productRepository;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+        /** @var ProductRepository $productRepository */
+        $this->productRepository = $this->entityManager->getRepository(Product::class);
     }
 
     public function create(string $name, string $description, int $weight, Category $category): Product
@@ -35,16 +38,12 @@ class ProductManager
      */
     public function getProducts(int $page, int $perPage): array
     {
-        /** @var ProductRepository $productRepository */
-        $productRepository = $this->entityManager->getRepository(Product::class);
-        return $productRepository->getProducts($page, $perPage);
+        return $this->productRepository->findBy([], [], $perPage, $page * $perPage);
     }
 
     public function getCountPage(int $perPage): int
     {
         if ($perPage === 0) return 0;
-        /** @var ProductRepository $productRepository */
-        $productRepository = $this->entityManager->getRepository(Product::class);
-        return ceil($productRepository->getCountProducts() / $perPage);
+        return ceil($this->productRepository->getCountProducts() / $perPage);
     }
 }

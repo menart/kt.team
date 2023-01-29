@@ -2,20 +2,23 @@
 
 namespace App\Controller;
 
+use App\Manager\CategoryManager;
 use App\Manager\ProductManager;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/product')]
 class ProductController extends AbstractController
 {
     private ProductManager $productManager;
+    private CategoryManager $categoryManager;
 
-    public function __construct(ProductManager $productManager)
+    public function __construct(ProductManager $productManager, CategoryManager $categoryManager)
     {
         $this->productManager = $productManager;
+        $this->categoryManager = $categoryManager;
     }
 
     #[Route(path: '', methods: ['GET'])]
@@ -27,6 +30,7 @@ class ProductController extends AbstractController
             [
                 'title' => 'product',
                 'rows' => $this->productManager->getProducts($page, $perPage),
+                'categories' => $this->categoryManager->getAll(),
                 'page' => $page,
                 'perPage' => $perPage,
                 'pageCount' => $this->productManager->getCountPage($perPage)

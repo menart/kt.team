@@ -29,11 +29,12 @@ class CategoryManager
 
     public function getAll(): array
     {
-        return $this->repository->findAll();
+        return $this->repository->findBy([], ['name' => 'ASC']);
     }
 
-    public function getOrCreate(string $name)
+    public function getOrCreate(string $name):Category
     {
+        /** @var Category $category */
         $category = $this->repository->findBy(['name', $name]);
         return $category ?: $this->create($name);
     }
