@@ -5,6 +5,12 @@
             weightMin: {{ filter.weightMin ?? 0 }},
             weightMax: {{ filter.weightMax ?? 0 }},
         };
+        const search = window.location.search;
+        let locationSearch = {
+            page: {{ page ?? 0 }},
+            perPage: {{ perPage ?? 20 }},
+            query: {{ query ?? "''"}}
+        }
     </script>
     <div class="container-fluid">
         <a class="navbar-brand" href="#">KT-TEAM</a>
@@ -26,7 +32,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% for countPerPage in [10,20,50] %}
-                            <li><a class="dropdown-item {% if perPage == countPerPage %} active {% endif %}"
+                            <li><a class="dropdown-item a-per-page {% if perPage == countPerPage %} active {% endif %}"
                                    href="#">{{ countPerPage }}</a></li>
                         {% endfor %}
                     </ul>
@@ -34,11 +40,15 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#weightModal">
                     Фильтр веса
                 </button>
+
+                <button type="button" class="btn btn-success" id="set-filter" onclick="getFilterPage()">
+                    Отфильтровать
+                </button>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
-                <button class="btn btn-secondary" type="submit">Поиск</button>
-            </form>
+            <div class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск" id="query-string">
+                <button class="btn btn-secondary" onclick="queryFilter()">Поиск</button>
+            </div>
         </div>
     </div>
 </nav>

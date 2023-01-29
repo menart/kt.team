@@ -25,9 +25,10 @@ class ProductController extends AbstractController
     #[Route(path: '', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $page = $request->request->get('page') ?? 0;
-        $perPage = $request->request->get('per-page') ?? 20;
-        $filter = new FilterDto();
+        $page = $request->get('page') ?? 0;
+        $perPage = $request->get('per-page') ?? 20;
+        $filterDto = new FilterDto();
+        $filter = json_decode($request->get('filter'));
         return $this->render('product.twig',
             [
                 'title' => 'product',
@@ -36,7 +37,7 @@ class ProductController extends AbstractController
                 'page' => $page,
                 'perPage' => $perPage,
                 'pageCount' => $this->productManager->getCountPage($perPage),
-                'filter' => $filter,
+                'filter' => $filterDto,
             ]);
     }
 }

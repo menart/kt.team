@@ -16,9 +16,34 @@
             }
             if (filterParam.category.length == 0) {
                 document.getElementById('all-category').classList.add('active');
-            }else{
+            } else {
                 document.getElementById('all-category').classList.remove('active');
             }
         })
     );
+    let aPerPage = document.querySelectorAll('.a-per-page');
+    aPerPage.forEach(a => a.addEventListener('click', () => {
+        locationSearch.perPage = Number(a.textContent);
+        getFilterPage();
+    }));
+
+    let pageItems = document.querySelectorAll('.page-item');
+    pageItems.forEach(page => page.addEventListener('click', () => {
+        if (!page.classList.contains('disabled')) {
+            locationSearch.page = page.dataset.page;
+            getFilterPage();
+        }
+    }));
+
+    function queryFilter(){
+        locationSearch.query = document.getElementById('query-string').value;
+        getFilterPage();
+    }
+
+    function getFilterPage() {
+        document.location = document.location.pathname + '?page=' + locationSearch.page
+            + '&per-page=' + locationSearch.perPage + '&query=' + locationSearch.query +
+            '&filter=' + JSON.stringify(filterParam);
+    }
+    {{ pageCount }}
 </script>
