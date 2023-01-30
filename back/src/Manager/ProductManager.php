@@ -3,9 +3,12 @@
 namespace App\Manager;
 
 use App\Dto\FilterDto;
+use App\Dto\ProductDto;
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Mapper\ProductMapper;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -13,12 +16,33 @@ class ProductManager
 {
     private EntityManagerInterface $entityManager;
     private ProductRepository $productRepository;
+    private ProductMapper $productMapper;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ProductMapper $productMapper)
     {
         $this->entityManager = $entityManager;
         /** @var ProductRepository $productRepository */
         $this->productRepository = $this->entityManager->getRepository(Product::class);
+        $this->productMapper = $productMapper;
+    }
+
+    /**
+     * @param ArrayCollection $batchProductsDto
+     * @return int
+     */
+    public function createBatch(ArrayCollection $batchProductsDto): int
+    {
+        $batchProductEntity = $batchProductsDto->map(function ($value) {
+            $productEntity = $this->productMapper->toEntity($value);
+            $this->entityManager->persist($productEntity);
+            return $productEntity;
+        });
+        $this->entityManager->flush();
+        $count = $batchProductEntity->reduce(function (int $accumulator, Product $value): int {
+            return $accumulator + $value->getId() !== null ? 1 : 0;
+        }, 0);
+        $batchProductEntity = null;
+        return $count;
     }
 
     public function create(string $name, string $description, int $weight, Category $category): Product

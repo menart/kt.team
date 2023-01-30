@@ -15,7 +15,7 @@ class CategoryManager
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->repository = $entityManager->getRepository(Category::class);
+        $this->repository = $this->entityManager->getRepository(Category::class);
     }
 
     public function create(string $name): Category
@@ -35,7 +35,7 @@ class CategoryManager
     public function getOrCreate(string $name):Category
     {
         /** @var Category $category */
-        $category = $this->repository->findBy(['name', $name]);
+        $category = $this->repository->findOneBy(['name' => $name]);
         return $category ?: $this->create($name);
     }
 }

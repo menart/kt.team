@@ -11,3 +11,4 @@ back/public/bundles/
 back/var/
 back/vendor/
 ###< symfony/framework-bundle ###
+back/uploads/*

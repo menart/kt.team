@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table]
 #[ORM\Entity]
 #[ORM\Index(columns: ['name'], name: 'category_name_idx')]
+#[ORM\HasLifecycleCallbacks]
 class Category
 {
     #[ORM\Column(name: 'id', type: 'bigint', unique: true)]

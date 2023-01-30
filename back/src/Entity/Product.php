@@ -25,7 +25,7 @@ class Product
     private string $description;
 
     #[ORM\Column(type: 'bigint', nullable: false)]
-    private string $weight;
+    private int $weight;
 
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     private DateTime $createdAt;
@@ -86,17 +86,17 @@ class Product
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getWeight(): string
+    public function getWeight(): int
     {
         return $this->weight;
     }
 
     /**
-     * @param string $weight
+     * @param int $weight
      */
-    public function setWeight(string $weight): void
+    public function setWeight(int $weight): void
     {
         $this->weight = $weight;
     }

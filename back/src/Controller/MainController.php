@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route(path: '', methods: ['GET'])]
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $list = [
             [

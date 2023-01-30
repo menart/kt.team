@@ -43,9 +43,7 @@ RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
     zip
 RUN apk add --no-cache $PHPIZE_DEPS \
     && pecl install xdebug-3.1.3 \
-    && docker-php-ext-enable xdebug \
-    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_host = host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    && docker-php-ext-enable xdebug
 
 RUN pecl channel-update pecl.php.net \
     && pecl install -o -f \
