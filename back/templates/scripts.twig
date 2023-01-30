@@ -1,4 +1,15 @@
 <script>
+    let filterParam = {
+        category: {{ filter.getCategory }} ,
+        weightMin: {{ filter.weightMin ?? 0 }},
+        weightMax: {{ filter.weightMax ?? 0 }},
+    };
+    const search = window.location.search;
+    let locationSearch = {
+        page: {{ page ?? 0 }},
+        perPage: {{ perPage ?? 20 }},
+        query: {{ query ?? "''" }}
+    }
     let btnSetWeight = document.getElementById('btn-set-weight');
     btnSetWeight.addEventListener('click', () => {
         filterParam.weightMin = document.getElementById('input-min-weight').value;
@@ -26,6 +37,13 @@
         locationSearch.perPage = Number(a.textContent);
         getFilterPage();
     }));
+    let allCategory = document.getElementById('all-category');
+    allCategory.addEventListener('click', () => {
+        let liCategories = document.querySelectorAll('.li-category');
+        liCategories.forEach(liCategory => liCategory.classList.remove('active'));
+        filterParam.category = [];
+        allCategory.classList.add('active');
+    });
 
     let pageItems = document.querySelectorAll('.page-item');
     pageItems.forEach(page => page.addEventListener('click', () => {
@@ -35,7 +53,7 @@
         }
     }));
 
-    function queryFilter(){
+    function queryFilter() {
         locationSearch.query = document.getElementById('query-string').value;
         getFilterPage();
     }

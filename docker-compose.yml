@@ -8,8 +8,6 @@ services:
       dockerfile: Dockerfile
     container_name: app
     restart: unless-stopped
-    ports:
-      - 9000:9000
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev

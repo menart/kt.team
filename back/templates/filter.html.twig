@@ -1,17 +1,4 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <script>
-        let filterParam = {
-            category: {{ filter.getCategory }} ,
-            weightMin: {{ filter.weightMin ?? 0 }},
-            weightMax: {{ filter.weightMax ?? 0 }},
-        };
-        const search = window.location.search;
-        let locationSearch = {
-            page: {{ page ?? 0 }},
-            perPage: {{ perPage ?? 20 }},
-            query: {{ query ?? "''"}}
-        }
-    </script>
     <div class="container-fluid">
         <a class="navbar-brand" href="#">KT-TEAM</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

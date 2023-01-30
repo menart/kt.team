@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/product')]
+#[Route(path: '/products')]
 class ProductController extends AbstractController
 {
     private ProductManager $productManager;
@@ -32,7 +32,7 @@ class ProductController extends AbstractController
         $filterDto->weightMin = $filter->weightMin ?? 0;
         $filterDto->weightMax = $filter->weightMax ?? 0;
         $filterDto->category = $filter->category ?? [];
-        $filterDto->query = $request->get('query');
+        $filterDto->query = $request->get('query') ?? '';
         return $this->render('product.twig',
             [
                 'title' => 'product',
