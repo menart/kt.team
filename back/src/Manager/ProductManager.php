@@ -3,7 +3,6 @@
 namespace App\Manager;
 
 use App\Dto\FilterDto;
-use App\Dto\ProductDto;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Mapper\ProductMapper;
@@ -38,10 +37,12 @@ class ProductManager
             return $productEntity;
         });
         $this->entityManager->flush();
-        $count = $batchProductEntity->reduce(function (int $accumulator, Product $value): int {
-            return $accumulator + $value->getId() !== null ? 1 : 0;
+        $count = $batchProductEntity->reduce(function (int $accumulator, Product $entity): int {
+            $count = $accumulator + $entity->getId() !== null ? 1 : 0;
+            return $count;
         }, 0);
         $batchProductEntity = null;
+        $this->entityManager->clear();
         return $count;
     }
 

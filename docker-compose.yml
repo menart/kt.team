@@ -53,6 +53,37 @@ services:
     networks:
       - kt-team-network
 
+  memcached:
+    image: memcached:latest
+    container_name: 'memcached'
+    restart: always
+    ports:
+      - 11211:11211
+    networks:
+      - kt-team-network
+
+  redis:
+    container_name: 'redis'
+    image: redis
+    ports:
+      - 6379:6379
+    networks:
+      - kt-team-network
+
+  rabbitmq:
+    image: rabbitmq:3.11.7-management-alpine
+    working_dir: /www
+    hostname: rabbit-mq
+    container_name: 'rabbit-mq'
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    networks:
+      - kt-team-network
+
 #Docker Networks
 networks:
   kt-team-network:

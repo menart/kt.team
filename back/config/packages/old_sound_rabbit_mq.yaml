@@ -1,0 +1,22 @@
+old_sound_rabbit_mq:
+    connections:
+        default:
+            url: '%env(RABBITMQ_URL)%'
+
+    producers:
+        parse_data_file:
+            connection: default
+            exchange_options: {name: 'old_sound_rabbit_mq.parse_data_file', type: direct}
+
+    consumers:
+        parse_data_file:
+            connection: default
+            exchange_options: {name: 'old_sound_rabbit_mq.parse_data_file', type: direct}
+            queue_options: {name: 'old_sound_rabbit_mq.consumer.parse_data_file'}
+            callback: App\Consumer\ParseFileConsumer
+            idle_timeout: 300
+            idle_timeout_exit_code: 0
+            graceful_max_execution:
+                timeout: 1800
+                exit_code: 0
+            qos_options: {prefetch_size: 0, prefetch_count: 1, global: false}

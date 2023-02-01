@@ -5,7 +5,7 @@
         <div class="mb-3">
             <label for="importFile" class="form-label">Импорт товаров</label>
             <input type="file" class="form-control-file" id="import-file" name="import-file" aria-describedby="emailHelp">
-            <div id="importFileHelp" class="form-text">Импорт товаров</div>
+            <div id="importFileHelp" class="form-text">Импорт товаров - загружено {{ countUploads ?? 0 }}</div>
         </div>
         <button type="submit" class="btn btn-primary">Загрузить</button>
     </form>

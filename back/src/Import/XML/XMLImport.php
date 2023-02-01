@@ -11,7 +11,6 @@ class XMLImport extends AbstractImport
 
     private XMLReader $XMLReader;
 
-
     public function parse($fileName): int
     {
         $countParse = 0;
@@ -21,7 +20,8 @@ class XMLImport extends AbstractImport
         while ($this->XMLReader->name === self::NODE_PRODUCT_NAME) {
             $node = new \SimpleXMLElement($this->XMLReader->readOuterXml());
             $this->parseProduct($node);
-            $node = null;
+            unset($node);
+            $this->incCountUpload();
             $this->XMLReader->next(self::NODE_PRODUCT_NAME);
         }
         $this->XMLReader->close();
@@ -32,13 +32,21 @@ class XMLImport extends AbstractImport
     {
         $name = $node->name;
         $description = $node->description;
-        $weight = intval($node->weight);
+        $weight = $this->parseWeight($node->weight);
         $categoryName = $node->category;
+        unset($node);
         $this->saveProduct($name, $description, $weight, $categoryName);
     }
 
     private function skipRowToFisrtImplemntation(string $nameFisrtImplemntation)
     {
         while ($this->XMLReader->read() && $this->XMLReader->name !== $nameFisrtImplemntation) ;
+    }
+
+    private function parseWeight(string $weightString): int
+    {
+        $split = explode(' ', $weightString);
+        $digits = intval(trim($split[1] ?? 'kg') == 'kg' ? 1000 : 1);
+        return intval($split[0]) * $digits;
     }
 }

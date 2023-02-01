@@ -31,3 +31,7 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
+
+    App\Service\AsyncService:
+        calls:
+            - ['registerProducer', [!php/const App\Service\AsyncService::PARSE_DATA_FILE, '@old_sound_rabbit_mq.parse_data_file_producer']]
