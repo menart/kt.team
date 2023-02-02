@@ -43,9 +43,6 @@ RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
     sockets \
     pcntl \
     zip
-RUN apk add --no-cache $PHPIZE_DEPS \
-    && pecl install xdebug-3.1.3 \
-    && docker-php-ext-enable xdebug
 
 RUN pecl channel-update pecl.php.net \
     && pecl install -o -f \
@@ -58,3 +55,7 @@ RUN pecl channel-update pecl.php.net \
     && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
 
 RUN echo 'alias symfony="php /www/back/bin/console "' >> ~/.bashrc
+
+#RUN apk add --no-cache $PHPIZE_DEPS \
+#    && pecl install xdebug-3.1.3 \
+#    && docker-php-ext-enable xdebug

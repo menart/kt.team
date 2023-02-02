@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Constatns\CacheConstants;
 use App\Exception\NotSupportedImportFileException;
 use App\Service\AsyncService;
 use App\Service\FileUploader;
@@ -48,7 +49,7 @@ class ImportController extends AbstractController
                 json_encode(['pathFile' => $fileUploadPath], JSON_THROW_ON_ERROR)
             );
         }
-        $countUploads = $this->cacheItemPool->getItem('uploads.count')->get() ?? 0;
+        $countUploads = $this->cacheItemPool->getItem(CacheConstants::CACHE_UPLOAD_ROW)->get() ?? 0;
         return $this->render('import.twig', [
             'title' => 'import',
             'countUploads' => $countUploads,

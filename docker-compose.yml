@@ -15,7 +15,7 @@ services:
     working_dir: /www
     volumes:
       - ${PATH_CONF}/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-      - ${PATH_CONF}/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+#      - ${PATH_CONF}/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ${PATH_CONF}/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
       - ${PATH_BACK}:/www
       - "phpsocket:/var/run"

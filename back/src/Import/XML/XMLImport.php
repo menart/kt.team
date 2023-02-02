@@ -11,11 +11,15 @@ class XMLImport extends AbstractImport
 
     private XMLReader $XMLReader;
 
-    public function parse($fileName): int
+    public function parse(): int
     {
+        if (file_exists($this->fileName) === false) {
+            return 0;
+        }
+
         $countParse = 0;
         $this->XMLReader = new XMLReader();
-        $this->XMLReader->open($fileName);
+        $this->XMLReader->open($this->fileName);
         $this->skipRowToFisrtImplemntation(self::NODE_PRODUCT_NAME);
         while ($this->XMLReader->name === self::NODE_PRODUCT_NAME) {
             $node = new \SimpleXMLElement($this->XMLReader->readOuterXml());
@@ -25,6 +29,8 @@ class XMLImport extends AbstractImport
             $this->XMLReader->next(self::NODE_PRODUCT_NAME);
         }
         $this->XMLReader->close();
+        unlink($this->fileName);
+        $this->saveBatch();
         return $countParse;
     }
 

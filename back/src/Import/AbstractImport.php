@@ -2,10 +2,13 @@
 
 namespace App\Import;
 
+use App\Constatns\CacheConstants;
 use App\Dto\ProductDto;
 use App\Entity\Category;
+use App\Exception\NotSupportedExportFileException;
 use App\Manager\CategoryManager;
 use App\Manager\ProductManager;
+use App\Service\AsyncService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -13,13 +16,20 @@ use Psr\Cache\InvalidArgumentException;
 abstract class AbstractImport
 {
     private const BATCH_SIZE = 10000;
+    private const BIG_SIZE = 5 * 1024 * 1024;
+    private const EXT_EXPORT = 'json';
 
     protected CategoryManager $categoryManager;
     protected ProductManager $productManager;
     protected CacheItemPoolInterface $cacheItemPool;
+    protected ExportFactory $exportFactory;
+    protected AsyncService $asyncService;
 
     private ArrayCollection $categories;
     private ArrayCollection $products;
+    protected string $fileName;
+    private int $iteration = 0;
+    private bool $isBigFile;
 
     private int $count = 0;
 
@@ -27,21 +37,33 @@ abstract class AbstractImport
      * @param CategoryManager $categoryManager
      * @param ProductManager $productManager
      * @param CacheItemPoolInterface $cacheItemPool
+     * @param ExportFactory $exportFactory
+     * @param AsyncService $asyncService
+     * @param string $fileName
      */
     public function __construct(
         CategoryManager        $categoryManager,
         ProductManager         $productManager,
-        CacheItemPoolInterface $cacheItemPool
+        CacheItemPoolInterface $cacheItemPool,
+        ExportFactory          $exportFactory,
+        AsyncService           $asyncService,
+        string                 $fileName
     )
     {
         $this->categoryManager = $categoryManager;
         $this->productManager = $productManager;
         $this->cacheItemPool = $cacheItemPool;
+        $this->exportFactory = $exportFactory;
+        $this->asyncService = $asyncService;
+        $this->fileName = $fileName;
+        if (file_exists($fileName)) {
+            $this->isBigFile = filesize($fileName) > self::BIG_SIZE;
+        }
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
 
-    abstract function parse(string $fileName): int;
+    abstract function parse(): int;
 
     protected function saveProduct(string $name, string $description, int $weight, string $categoryName): void
     {
@@ -50,15 +72,59 @@ abstract class AbstractImport
         $productDto->setDescription($description);
         $productDto->setWeight($weight);
         $productDto->setCategory($this->findCategory($categoryName));
+        $productDto->setCategoryName($productDto->getCategory()->getName());
         $this->products->add($productDto);
         if ($this->products->count() === self::BATCH_SIZE) {
-            $this->productManager->createBatch($this->products);
-            $countItem = $this->cacheItemPool->getItem('uploads.count');
-            $countItem->set($this->count);
-            $countItem->expiresAfter(60);
-            $this->cacheItemPool->save($countItem);
-            $this->products = new ArrayCollection();
+            $this->saveBatch();
         }
+    }
+
+    protected function saveBatch(): void
+    {
+        if ($this->isBigFile) {
+            $this->saveIntoPartFile();
+        } else {
+            $this->saveIntoDB();
+        }
+        $countItem = $this->cacheItemPool->getItem(CacheConstants::CACHE_UPLOAD_ROW);
+        $countItem->set($this->count);
+        $countItem->expiresAfter(60);
+        $this->cacheItemPool->save($countItem);
+        $this->products = new ArrayCollection();
+    }
+
+    private function saveIntoDB(): void
+    {
+        if($this->products->count() > 0) {
+            /** @var ProductDto $productDto */
+            foreach ($this->products as &$productDto) {
+                if ($productDto->getCategory() === null)
+                    $productDto->setCategory($this->findCategory($productDto->getName()));
+            }
+            $this->productManager->createBatch($this->products);
+            unset($productDto);
+        }
+    }
+
+    /**
+     * @throws NotSupportedExportFileException
+     * @throws \JsonException
+     */
+    private function saveIntoPartFile(): void
+    {
+        $pathInfo = pathinfo($this->fileName);
+        $dir = $pathInfo['dirname'];
+        $name = $pathInfo['filename'];
+        $fileName = rtrim($dir, '/') . DIRECTORY_SEPARATOR
+            . $name . '_' . ++$this->iteration . '.' . self::EXT_EXPORT;
+        $export = $this->exportFactory->getInstance($fileName);
+        if ($export->save($this->products) > 0) {
+            $this->asyncService->publishToExchange(
+                AsyncService::PARSE_DATA_FILE,
+                json_encode(['pathFile' => $fileName], JSON_THROW_ON_ERROR)
+            );
+        }
+        unset($productDto);
     }
 
     private function findCategory(string $categoryName): Category

@@ -6,10 +6,27 @@ use App\Entity\Category;
 
 class ProductDto
 {
-    private string $name;
-    private string $description;
-    private int $weight;
-    private Category $category;
+    public string $name;
+    public string $description;
+    public int $weight;
+    public ?Category $category;
+    public string  $categoryName;
+
+    /**
+     * @return string
+     */
+    public function getCategoryName(): string
+    {
+        return $this->categoryName;
+    }
+
+    /**
+     * @param string $categoryName
+     */
+    public function setCategoryName(string $categoryName): void
+    {
+        $this->categoryName = $categoryName;
+    }
 
     /**
      * @return string
@@ -60,9 +77,9 @@ class ProductDto
     }
 
     /**
-     * @return Category
+     * @return null|Category
      */
-    public function getCategory(): Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }

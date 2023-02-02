@@ -18,6 +18,9 @@ class FileUploader
 
     public function upload(UploadedFile $file): string
     {
+        if (file_exists($this->getTargetDirectory()) === false) {
+            mkdir($this->getTargetDirectory());
+        }
         $originalFilename = $file->getClientOriginalName();
         $file->move($this->getTargetDirectory(), $originalFilename);
         return $this->getTargetDirectory() . DIRECTORY_SEPARATOR . $originalFilename;
