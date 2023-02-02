@@ -12,7 +12,7 @@ class JSONExport extends AbstractExport
         $fileResource = fopen($this->fileName, 'w+');
         $count = 0;
         foreach ($exportData as $data) {
-            $json = json_encode($data, JSON_FORCE_OBJECT, 512) . PHP_EOL;
+            $json = json_encode($data->getArray(), JSON_UNESCAPED_UNICODE, 512) . PHP_EOL;
             fwrite($fileResource, $json);
             $count++;
         }
