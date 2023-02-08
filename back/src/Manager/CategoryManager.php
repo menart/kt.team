@@ -24,7 +24,6 @@ class CategoryManager
         $category->setName($name);
         $this->entityManager->persist($category);
         $this->entityManager->flush();
-        $this->entityManager->clear();
         return $category;
     }
 

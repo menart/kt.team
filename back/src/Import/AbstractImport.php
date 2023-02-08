@@ -15,7 +15,7 @@ use Psr\Cache\InvalidArgumentException;
 
 abstract class AbstractImport
 {
-    private const BATCH_SIZE = 10000;
+    private const BATCH_SIZE = 1000;
     private const BIG_SIZE = 5 * 1024 * 1024;
     private const EXT_EXPORT = 'json';
 
@@ -72,7 +72,6 @@ abstract class AbstractImport
         $productDto->setDescription($description);
         $productDto->setWeight($weight);
         $productDto->setCategory($this->findCategory($categoryName));
-        $productDto->setCategoryName($productDto->getCategory()->getName());
         $this->products->add($productDto);
         if ($this->products->count() === self::BATCH_SIZE) {
             $this->saveBatch();
@@ -81,6 +80,7 @@ abstract class AbstractImport
 
     protected function saveBatch(): void
     {
+        if (empty($this->products)) return;
         if ($this->isBigFile) {
             $this->saveIntoPartFile();
         } else {
@@ -95,7 +95,7 @@ abstract class AbstractImport
 
     private function saveIntoDB(): void
     {
-        if($this->products->count() > 0) {
+        if ($this->products->count() > 0) {
             /** @var ProductDto $productDto */
             foreach ($this->products as &$productDto) {
                 if ($productDto->getCategory() === null)

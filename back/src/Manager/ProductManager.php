@@ -41,8 +41,8 @@ class ProductManager
             $count = $accumulator + $entity->getId() !== null ? 1 : 0;
             return $count;
         }, 0);
-        $batchProductEntity = null;
         $this->entityManager->clear();
+        $batchProductEntity = null;
         return $count;
     }
 

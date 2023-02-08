@@ -27,7 +27,7 @@ class Category
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
     private DateTime $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'Product')]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'Product', cascade: ['persist', 'remove'])]
     private Collection $products;
 
     public function __construct()

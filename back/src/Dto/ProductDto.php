@@ -75,7 +75,10 @@ class ProductDto
         $this->category = $category;
     }
 
-    public function getArray()
+    /**
+     * @return array
+     */
+    public function getArray():array
     {
         return [
             'name' => $this->name,

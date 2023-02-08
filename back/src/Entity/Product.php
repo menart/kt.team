@@ -33,7 +33,7 @@ class Product
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
     private DateTime $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: 'Category', inversedBy: 'products')]
+    #[ORM\ManyToOne(targetEntity: 'Category', cascade: ['persist', 'remove'], inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private Category $category;
 

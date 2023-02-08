@@ -56,6 +56,4 @@ RUN pecl channel-update pecl.php.net \
 
 RUN echo 'alias symfony="php /www/back/bin/console "' >> ~/.bashrc
 
-#RUN apk add --no-cache $PHPIZE_DEPS \
-#    && pecl install xdebug-3.1.3 \
-#    && docker-php-ext-enable xdebug
+RUN apk add supervisor && mkdir /var/log/supervisor
