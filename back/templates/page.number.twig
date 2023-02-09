@@ -1,14 +1,25 @@
 <nav aria-label="Пример навигации по страницам">
     <ul class="pagination justify-content-center">
+        <li class="page-item" data-page="0">
+            <a class="page-link{% if page == 0 %} active{% endif %}" href="#">1</a></li>
         <li class="page-item {% if page == 0 %} disabled {% endif %}" data-page="{{ page-1 }}"><a class="page-link"
                                                                                                   href="#">Предыдущая</a>
         </li>
-        {% for number in 1..pageCount %}
-            <li class="page-item {% if number == page+1 %} active {% endif %}" data-page="{{ number-1 }}"><a
-                        class="page-link" href="#">{{ number }}</a></li>
-        {% endfor %}
-        <li class="page-item {% if page == pageCount %} disabled {% endif %}" data-page="{{ page+1 }}"><a
+        {% if page > 0 and page < pageCount - 1 %}
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" placeholder="{{ page + 1 }}" aria-label="номер страницы"
+                       aria-describedby="button-addon2" value="{{ page + 1 }}">
+                <button class="btn btn-outline-primary" type="button" id="button-addon2">перейти</button>
+            </div>
+        {% endif %}
+
+        <li class="page-item {% if page == pageCount-1 %} disabled {% endif %}" data-page="{{ page+1 }}"><a
                     class="page-link"
                     href="#">Следующая</a></li>
+        {% if pageCount > 0 %}
+            <li class="page-item" data-page="{{ pageCount-1 }}">
+                <a class="page-link {% if page == pageCount-1 %} active{% endif %}" href="#">{{ pageCount }}</a></li>
+        {% endif %}
+
     </ul>
 </nav>

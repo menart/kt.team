@@ -9,6 +9,7 @@ use App\Exception\NotSupportedExportFileException;
 use App\Manager\CategoryManager;
 use App\Manager\ProductManager;
 use App\Service\AsyncService;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -88,7 +89,7 @@ abstract class AbstractImport
         }
         $countItem = $this->cacheItemPool->getItem(CacheConstants::CACHE_UPLOAD_ROW);
         $countItem->set($this->count);
-        $countItem->expiresAfter(60);
+        $countItem->expiresAfter(DateInterval::createFromDateString('10 minutes'));
         $this->cacheItemPool->save($countItem);
         $this->products = new ArrayCollection();
     }

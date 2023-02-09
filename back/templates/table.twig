@@ -13,7 +13,7 @@
             <tbody>
             {% for row in rows %}
             <tr>
-                <th scope="row">{{ loop.index }}</th>
+                <th scope="row">{{ loop.index + page * perPage }}</th>
                 <td>{{ row.name }}</td>
                 <td>{{ row.description }}</td>
                 <td>{{ row.weight | weight}}</td>
