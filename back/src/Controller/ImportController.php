@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Constatns\CacheConstants;
 use App\Exception\NotSupportedImportFileException;
 use App\Service\AsyncService;
 use App\Service\FileUploader;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,16 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/import')]
 class ImportController extends AbstractController
 {
-
-    private CacheItemPoolInterface $cacheItemPool;
-
-    /**
-     * @param CacheItemPoolInterface $cacheItemPool
-     */
-    public function __construct(CacheItemPoolInterface $cacheItemPool)
-    {
-        $this->cacheItemPool = $cacheItemPool;
-    }
 
 
     #[Route(path: '', methods: ['GET'])]
@@ -49,10 +37,8 @@ class ImportController extends AbstractController
                 json_encode(['pathFile' => $fileUploadPath], JSON_THROW_ON_ERROR)
             );
         }
-        $countUploads = $this->cacheItemPool->getItem(CacheConstants::CACHE_UPLOAD_ROW)->get() ?? 0;
         return $this->render('import.twig', [
-            'title' => 'import',
-            'countUploads' => $countUploads,
+            'title' => 'import'
         ]);
     }
 
