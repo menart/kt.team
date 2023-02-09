@@ -5,13 +5,14 @@
         <li class="page-item {% if page == 0 %} disabled {% endif %}" data-page="{{ page-1 }}"><a class="page-link"
                                                                                                   href="#">Предыдущая</a>
         </li>
-        {% if page > 0 and page < pageCount - 1 %}
-            <div class="input-group mb-3">
-                <input type="number" class="form-control" placeholder="{{ page + 1 }}" aria-label="номер страницы"
-                       aria-describedby="button-addon2" value="{{ page + 1 }}">
-                <button class="btn btn-outline-primary" type="button" id="button-addon2">перейти</button>
-            </div>
-        {% endif %}
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Страница №</span>
+            <input type="number" class="form-control" placeholder="{{ page + 1 }}" aria-label="номер страницы"
+                   aria-describedby="change-page" value="{{ page + 1 }}" id="page-input">
+            <button class="btn btn-outline-primary" type="button" id="change-page" onclick="changePage();">перейти
+            </button>
+        </div>
 
         <li class="page-item {% if page == pageCount-1 %} disabled {% endif %}" data-page="{{ page+1 }}"><a
                     class="page-link"

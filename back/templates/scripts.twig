@@ -63,5 +63,9 @@
             + '&per-page=' + locationSearch.perPage + '&query=' + locationSearch.query +
             '&filter=' + JSON.stringify(filterParam);
     }
-    {{ pageCount }}
+
+    function changePage() {
+        locationSearch.page = document.getElementById('page-input').value - 1;
+        getFilterPage();
+    }
 </script>
