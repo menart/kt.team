@@ -27,7 +27,9 @@ RUN apk update \
     postgresql-dev \
     curl \
     wget \
-    bash
+    bash \
+    rabbitmq-c \
+    rabbitmq-c-dev
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -40,18 +42,17 @@ RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
     intl \
     gd \
     bcmath \
-    pcntl \
     pdo_pgsql \
     sockets \
+    pcntl \
     zip
+
 RUN pecl channel-update pecl.php.net \
     && pecl install -o -f \
-    redis \
-    event \
-    memcached \
+        amqp \
+        event \
     && rm -rf /tmp/pear \
-    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini \
     && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini \
-    && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
+    && echo "extension=amqp.so" > /usr/local/etc/php/conf.d/amqp.ini
 
 RUN apk add supervisor && mkdir /var/log/supervisor

@@ -8,7 +8,6 @@ RUN apk update \
         build-base \
         icu-dev \
         libevent-dev \
-        libmemcached-dev \
         openssl-dev \
         zlib-dev \
         libzip \
@@ -27,7 +26,9 @@ RUN apk update \
         postgresql-dev \
         curl \
         wget \
-        bash
+        bash \
+        rabbitmq-c \
+        rabbitmq-c-dev
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -48,12 +49,10 @@ RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
 
 RUN pecl channel-update pecl.php.net \
     && pecl install -o -f \
-        redis \
+        amqp \
         event \
-        memcached \
     && rm -rf /tmp/pear \
-    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini \
     && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini \
-    && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
+    && echo "extension=amqp.so" > /usr/local/etc/php/conf.d/amqp.ini
 
 RUN echo 'alias symfony="php /www/back/bin/console "' >> ~/.bashrc
