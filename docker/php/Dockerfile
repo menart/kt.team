@@ -26,9 +26,7 @@ RUN apk update \
         postgresql-dev \
         curl \
         wget \
-        bash \
-        rabbitmq-c \
-        rabbitmq-c-dev
+        bash
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -49,10 +47,8 @@ RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
 
 RUN pecl channel-update pecl.php.net \
     && pecl install -o -f \
-        amqp \
         event \
     && rm -rf /tmp/pear \
-    && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini \
-    && echo "extension=amqp.so" > /usr/local/etc/php/conf.d/amqp.ini
+    && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini
 
 RUN echo 'alias symfony="php /www/back/bin/console "' >> ~/.bashrc

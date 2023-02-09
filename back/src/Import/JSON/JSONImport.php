@@ -30,7 +30,7 @@ class JSONImport extends AbstractImport
             }
         }
         unlink($this->fileName);
-        $this->saveBatch();
+        $this->saveBatchIntoDb();
         return $countParse;
     }
 }
