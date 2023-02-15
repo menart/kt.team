@@ -47,8 +47,10 @@ RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
 
 RUN pecl channel-update pecl.php.net \
     && pecl install -o -f \
+        xdebug-3.0.1 \
         event \
     && rm -rf /tmp/pear \
-    && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini
+    && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini \
+    && docker-php-ext-enable xdebug
 
 RUN echo 'alias symfony="php /www/back/bin/console "' >> ~/.bashrc
