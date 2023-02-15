@@ -34,10 +34,15 @@
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
 
-    <!-- Run `composer require symfony/panther` before enabling this extension -->
-    <!--
-    <extensions>
-        <extension class="Symfony\Component\Panther\ServerExtension" />
-    </extensions>
-    -->
+    <coverage cacheDirectory="build/cache" processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+
+        <report>
+            <html outputDirectory="build/coverage"/>
+            <clover outputFile="build/coverage/clover.xml"/>
+            <crap4j outputFile="build/coverage/crap4j.xml" threshold="50"/>
+        </report>
+    </coverage>
 </phpunit>
