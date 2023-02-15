@@ -30,7 +30,7 @@ class XMLImport extends AbstractImport
         }
         $this->XMLReader->close();
         unlink($this->fileName);
-        $this->saveBatch();
+        $this->finishImport();
         return $countParse;
     }
 

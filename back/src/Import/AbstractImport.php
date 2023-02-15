@@ -59,14 +59,19 @@ abstract class AbstractImport
         }
     }
 
-    protected function saveBatchIntoDb(): void
+    private function saveBatchIntoDb(): void
     {
         if (empty($this->products)) return;
         if ($this->products->count() > 0) {
             $this->productManager->createBatch($this->products);
-            unset($productDto);
+            unset($this->products);
         }
         $this->products = new ArrayCollection();
+    }
+
+    protected function finishImport()
+    {
+        $this->saveBatchIntoDb();
     }
 
     private function findCategory(string $categoryName): Category
