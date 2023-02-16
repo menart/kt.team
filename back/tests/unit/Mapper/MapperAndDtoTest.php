@@ -2,13 +2,14 @@
 
 namespace UnitTests\Mapper;
 
+use App\Dto\FilterDto;
 use App\Dto\ProductDto;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Mapper\ProductMapper;
 use PHPUnit\Framework\TestCase;
 
-class ProductMapperTest extends TestCase
+class MapperAndDtoTest extends TestCase
 {
 
     public function testToEntity()
@@ -41,5 +42,9 @@ class ProductMapperTest extends TestCase
             'categoryName' => $category->getName(),
         ];
         $this->assertEquals($arrayDto, $productDto->getArray());
+
+        $filterDto = new FilterDto();
+        $filterDto->category[] = $category->getName();
+        $this->assertEquals('["test category"]', $filterDto->getCategory());
     }
 }
