@@ -15,14 +15,12 @@ class ProductManager
 {
     private EntityManagerInterface $entityManager;
     private ProductRepository $productRepository;
-    private ProductMapper $productMapper;
 
     public function __construct(EntityManagerInterface $entityManager, ProductMapper $productMapper)
     {
         $this->entityManager = $entityManager;
         /** @var ProductRepository $productRepository */
         $this->productRepository = $this->entityManager->getRepository(Product::class);
-        $this->productMapper = $productMapper;
     }
 
     /**
@@ -32,7 +30,7 @@ class ProductManager
     public function createBatch(ArrayCollection $batchProductsDto): int
     {
         $batchProductEntity = $batchProductsDto->map(function ($value) {
-            $productEntity = $this->productMapper->toEntity($value);
+            $productEntity = ProductMapper::toEntity($value);
             $this->entityManager->persist($productEntity);
             return $productEntity;
         });

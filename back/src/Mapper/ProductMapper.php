@@ -7,7 +7,7 @@ use App\Entity\Product;
 
 class ProductMapper
 {
-    public function toEntity(ProductDto $dto): Product
+    public static function toEntity(ProductDto $dto): Product
     {
         $product = new Product();
         $product->setName($dto->getName());
