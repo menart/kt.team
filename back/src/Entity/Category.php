@@ -96,13 +96,4 @@ class Category
     {
         $this->updatedAt = new DateTime();
     }
-
-    /**
-     * @return Collection
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
 }
