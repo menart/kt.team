@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
-use App\Import\ImportFactory;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
+/**
+ * Для загрузки файла
+ */
 class FileUploader
 {
     private string $targetDirectory;
@@ -23,6 +25,7 @@ class FileUploader
         }
         $originalFilename = $file->getClientOriginalName();
         $file->move($this->getTargetDirectory(), $originalFilename);
+
         return $this->getTargetDirectory() . DIRECTORY_SEPARATOR . $originalFilename;
     }
 

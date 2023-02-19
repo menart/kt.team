@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Manager;
 
 use App\Dto\FilterDto;
@@ -11,6 +13,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Менеджер для product entity
+ */
 class ProductManager
 {
     private EntityManagerInterface $entityManager;
@@ -19,28 +24,24 @@ class ProductManager
     public function __construct(EntityManagerInterface $entityManager, ProductMapper $productMapper)
     {
         $this->entityManager = $entityManager;
-        /** @var ProductRepository $productRepository */
+        /* @var ProductRepository $productRepository */
         $this->productRepository = $this->entityManager->getRepository(Product::class);
     }
 
-    /**
-     * @param ArrayCollection $batchProductsDto
-     * @return int
-     */
     public function createBatch(ArrayCollection $batchProductsDto): int
     {
         $batchProductEntity = $batchProductsDto->map(function ($value) {
             $productEntity = ProductMapper::toEntity($value);
             $this->entityManager->persist($productEntity);
+
             return $productEntity;
         });
         $this->entityManager->flush();
         $count = $batchProductEntity->reduce(function (int $accumulator, Product $entity): int {
-            $count = $accumulator + $entity->getId() !== null ? 1 : 0;
-            return $count;
+            return null !== $accumulator + $entity->getId() ? 1 : 0;
         }, 0);
         $this->entityManager->clear();
-        $batchProductEntity = null;
+
         return $count;
     }
 
@@ -53,13 +54,15 @@ class ProductManager
         $product->setCategory($category);
         $this->entityManager->persist($product);
         $this->entityManager->flush();
+
         return $product;
     }
 
     /**
-     * @param int $page
-     * @param int $perPage
      * @return Product[]
+     * @param  int       $page
+     * @param  int       $perPage
+     * @param  FilterDto $filter
      */
     public function getProducts(int $page, int $perPage, FilterDto $filter): array
     {
@@ -80,12 +83,16 @@ class ProductManager
         }
         $criteria->setFirstResult($page * $perPage);
         $criteria->setMaxResults($perPage);
+
         return $this->productRepository->matching($criteria)->getValues();
     }
 
     public function getCountPage(int $perPage): int
     {
-        if ($perPage === 0) return 0;
+        if (0 === $perPage) {
+            return 0;
+        }
+
         return ceil($this->productRepository->getCountProducts() / $perPage);
     }
 }

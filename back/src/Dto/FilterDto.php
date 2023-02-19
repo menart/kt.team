@@ -1,7 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dto;
 
+/**
+ * DTO список полученной информации о фильтрации с фронта
+ */
 class FilterDto
 {
     public int $weightMin;
@@ -10,9 +15,6 @@ class FilterDto
     public array $category = [];
     public string $query;
 
-    /**
-     * @return string
-     */
     public function getCategory(): string
     {
         return json_encode($this->category ?? []);

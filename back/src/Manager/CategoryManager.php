@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Manager;
+declare(strict_types=1);
 
+namespace App\Manager;
 
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Менеджер для category entity
+ */
 class CategoryManager
 {
     private EntityManagerInterface $entityManager;
@@ -24,6 +28,7 @@ class CategoryManager
         $category->setName($name);
         $this->entityManager->persist($category);
         $this->entityManager->flush();
+
         return $category;
     }
 
@@ -32,10 +37,11 @@ class CategoryManager
         return $this->repository->findBy([], ['name' => 'ASC']);
     }
 
-    public function getOrCreate(string $name):Category
+    public function getOrCreate(string $name): Category
     {
         /** @var Category $category */
         $category = $this->repository->findOneBy(['name' => $name]);
+
         return $category ?: $this->create($name);
     }
 }

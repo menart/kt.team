@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
 
+/**
+ * Класс для публикаций сообщений в RabbitMQ и асинхронной обработки файла
+ */
 class AsyncService
 {
     public const PARSE_DATA_FILE = 'parse_data_file';
@@ -22,9 +27,11 @@ class AsyncService
     }
 
     public function publishToExchange(
-        string $producerName, string $message, ?string $routingKey = null, ?array $additionalProperties = null
-    ): bool
-    {
+        string $producerName,
+        string $message,
+        ?string $routingKey = null,
+        ?array $additionalProperties = null
+    ): bool {
         if (isset($this->producers[$producerName])) {
             $this->producers[$producerName]->publish(
                 $message,

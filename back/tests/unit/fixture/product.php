@@ -1,4 +1,5 @@
 <?php
+
 return [
     [
         'id' => 1,
@@ -26,5 +27,5 @@ return [
         'category_id' => 3,
         'created_at' => (new DateTime())->format('Y-m-d h:i:s'),
         'updated_at' => (new DateTime())->format('Y-m-d h:i:s'),
-    ]
+    ],
 ];

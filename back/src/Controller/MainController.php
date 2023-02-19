@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Стартовый контроллер
+ */
 #[Route(path: '/')]
 class MainController extends AbstractController
 {
@@ -15,18 +19,18 @@ class MainController extends AbstractController
     {
         $list = [
             [
-                'href' => '/products',
+                'href'  => '/products',
                 'title' => 'Список товаров',
             ],
             [
-                'href' => '/import',
+                'href'  => '/import',
                 'title' => 'Импорт товаров',
             ],
-
         ];
+
         return $this->render('index.twig', [
-           'title' => 'main',
-            'list' => $list,
+            'title' => 'main',
+            'list'  => $list,
         ]);
     }
 }

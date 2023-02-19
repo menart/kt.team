@@ -1,27 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
+/**
+ * Класс для привидения веса из граммов в кг и г
+ */
 class WeightExtension extends AbstractExtension
 {
-
     public function getFilters()
     {
         return [
-            new TwigFilter('weight', [$this, 'getWeightFormat'])
+            new TwigFilter('weight', [$this, 'getWeightFormat']),
         ];
     }
 
-    /**
-     * @param string $weight
-     * @return string
-     */
     public function getWeightFormat(string $weightString): string
     {
-        if (is_numeric($weightString) === false) return $weightString;
+        if (false === is_numeric($weightString)) {
+            return $weightString;
+        }
         $resultWeight = '';
         $weight = intval($weightString);
         if ($weight > 1000) {
@@ -32,7 +34,7 @@ class WeightExtension extends AbstractExtension
         if ($weight > 0) {
             $resultWeight .= sprintf(' %sg', $weight);
         }
+
         return trim($resultWeight);
     }
-
 }

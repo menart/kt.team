@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class MapperAndDtoTest extends TestCase
 {
-
     public function testToEntity()
     {
         $name = 'test name';

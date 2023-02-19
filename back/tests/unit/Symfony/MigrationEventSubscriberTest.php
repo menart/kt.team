@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class MigrationEventSubscriberTest extends TestCase
 {

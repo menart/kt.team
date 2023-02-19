@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
 {
-    public function testGetterAndSetter():void
+    public function testGetterAndSetter(): void
     {
         $product = new Product();
         $category = new Category();

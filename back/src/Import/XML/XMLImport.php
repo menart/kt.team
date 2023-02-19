@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Import\XML;
 
 use App\Import\AbstractImport;
-use \XMLReader;
+use SimpleXMLElement;
+use XMLReader;
 
+/**
+ * Для разбора импортируемого файла в XML
+ */
 class XMLImport extends AbstractImport
 {
     private const NODE_PRODUCT_NAME = 'product';
@@ -13,7 +19,7 @@ class XMLImport extends AbstractImport
 
     public function parse(): int
     {
-        if (file_exists($this->fileName) === false) {
+        if (false === file_exists($this->fileName)) {
             return 0;
         }
 
@@ -21,8 +27,8 @@ class XMLImport extends AbstractImport
         $this->XMLReader = new XMLReader();
         $this->XMLReader->open($this->fileName);
         $this->skipRowToFisrtImplemntation(self::NODE_PRODUCT_NAME);
-        while ($this->XMLReader->name === self::NODE_PRODUCT_NAME) {
-            $node = new \SimpleXMLElement($this->XMLReader->readOuterXml());
+        while (self::NODE_PRODUCT_NAME === $this->XMLReader->name) {
+            $node = new SimpleXMLElement($this->XMLReader->readOuterXml());
             $this->parseProduct($node);
             unset($node);
             $this->incCountUpload();
@@ -31,28 +37,30 @@ class XMLImport extends AbstractImport
         $this->XMLReader->close();
         unlink($this->fileName);
         $this->finishImport();
+
         return $countParse;
     }
 
-    private function parseProduct(\SimpleXMLElement $node): void
+    private function parseProduct(SimpleXMLElement $node): void
     {
-        $name = $node->name;
-        $description = $node->description;
-        $weight = $this->parseWeight($node->weight);
-        $categoryName = $node->category;
+        $name = strval($node->name);
+        $description = strval($node->description);
+        $weight = $this->parseWeight(strval($node->weight));
+        $categoryName = strval($node->category);
         unset($node);
         $this->saveProduct($name, $description, $weight, $categoryName);
     }
 
     private function skipRowToFisrtImplemntation(string $nameFisrtImplemntation)
     {
-        while ($this->XMLReader->read() && $this->XMLReader->name !== $nameFisrtImplemntation) ;
+        while ($this->XMLReader->read() && $this->XMLReader->name !== $nameFisrtImplemntation);
     }
 
     private function parseWeight(string $weightString): int
     {
         $split = explode(' ', $weightString);
-        $digits = intval(trim($split[1] ?? 'kg') == 'kg' ? 1000 : 1);
+        $digits = intval('kg' === trim($split[1] ?? 'kg') ? 1000 : 1);
+
         return intval($split[0]) * $digits;
     }
 }

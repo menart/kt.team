@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Import;
 
 use App\Exception\NotSupportedImportFileException;
@@ -8,28 +10,24 @@ use App\Manager\CategoryManager;
 use App\Manager\ProductManager;
 use App\Service\AsyncService;
 
+/**
+ * Фабрика, по расширению возвращает класс для разбора импортируемого файла
+ */
 class ImportFactory
 {
     private CategoryManager $categoryManager;
     private ProductManager $productManager;
     private AsyncService $asyncService;
 
-    /**
-     * @param CategoryManager $categoryManager
-     * @param ProductManager $productManager
-     * @param AsyncService $asyncService
-     */
     public function __construct(
         CategoryManager $categoryManager,
-        ProductManager  $productManager,
-        AsyncService    $asyncService
-    )
-    {
+        ProductManager $productManager,
+        AsyncService $asyncService
+    ) {
         $this->categoryManager = $categoryManager;
         $this->productManager = $productManager;
         $this->asyncService = $asyncService;
     }
-
 
     public function getInstance($fileName): AbstractImport
     {
@@ -48,7 +46,8 @@ class ImportFactory
 
     private function getExtension(string $filename): string
     {
-        $array = explode(".", $filename);
+        $array = explode('.', $filename);
+
         return strtolower(array_pop($array));
     }
 }

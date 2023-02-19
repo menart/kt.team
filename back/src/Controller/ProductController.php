@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Dto\FilterDto;
@@ -10,6 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Контроллер для отображения продуктов
+ */
 #[Route(path: '/products')]
 class ProductController extends AbstractController
 {
@@ -33,15 +38,18 @@ class ProductController extends AbstractController
         $filterDto->weightMax = $filter->weightMax ?? 0;
         $filterDto->category = $filter->category ?? [];
         $filterDto->query = $request->get('query') ?? '';
-        return $this->render('product.twig',
+
+        return $this->render(
+            'product.twig',
             [
-                'title' => 'product',
-                'rows' => $this->productManager->getProducts($page, $perPage, $filterDto),
+                'title'      => 'product',
+                'rows'       => $this->productManager->getProducts($page, $perPage, $filterDto),
                 'categories' => $this->categoryManager->getAll(),
-                'page' => $page,
-                'perPage' => $perPage,
-                'pageCount' => $this->productManager->getCountPage($perPage),
-                'filter' => $filterDto,
-            ]);
+                'page'       => $page,
+                'perPage'    => $perPage,
+                'pageCount'  => $this->productManager->getCountPage($perPage),
+                'filter'     => $filterDto,
+            ]
+        );
     }
 }

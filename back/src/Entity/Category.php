@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use DateTime;
@@ -7,6 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Entity category - Сущность для записи категории продукта.
+ */
 #[ORM\Table]
 #[ORM\Entity]
 #[ORM\Index(columns: ['name'], name: 'category_name_idx')]
@@ -17,16 +22,12 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id = null;
-
     #[ORM\Column(type: 'string', length: 250, nullable: false)]
     private string $name;
-
     #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
     private DateTime $createdAt;
-
     #[ORM\Column(name: 'updated_at', type: 'datetime')]
     private DateTime $updatedAt;
-
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: 'Product', cascade: ['persist', 'remove'])]
     private Collection $products;
 
@@ -35,42 +36,26 @@ class Category
         $this->products = new ArrayCollection();
     }
 
-
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int|null $id
-     */
     public function setId(?int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
@@ -82,9 +67,6 @@ class Category
         $this->createdAt = new DateTime();
     }
 
-    /**
-     * @return DateTime
-     */
     public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;

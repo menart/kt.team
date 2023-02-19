@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Symfony;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 
+/**
+ * Убираем создание public схемы
+ */
 class MigrationEventSubscriber implements EventSubscriber
 {
     /**
@@ -18,6 +22,7 @@ class MigrationEventSubscriber implements EventSubscriber
 
     /**
      * @throws SchemaException
+     * @param  GenerateSchemaEventArgs $args
      */
     public function postGenerateSchema(GenerateSchemaEventArgs $args): void
     {
