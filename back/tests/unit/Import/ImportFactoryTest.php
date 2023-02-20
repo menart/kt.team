@@ -15,7 +15,7 @@ class ImportFactoryTest extends AbstractTestCase
 {
     private ImportFactory $importFactory;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $categoryManager = \Mockery::mock(CategoryManager::class);
         $productManager = \Mockery::mock(ProductManager::class);

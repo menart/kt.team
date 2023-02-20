@@ -42,9 +42,10 @@ class Product
         return $this->id;
     }
 
-    public function setId(?int $id): void
+    public function setId(?int $id): Product
     {
         $this->id = $id;
+        return $this;
     }
 
 
@@ -57,9 +58,10 @@ class Product
      *
      * @param string $name
      */
-    public function setName(string $name): void
+    public function setName(string $name): Product
     {
         $this->name = $name;
+        return $this;
     }
 
     public function getDescription(): string
@@ -67,9 +69,10 @@ class Product
         return $this->description;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(string $description): Product
     {
         $this->description = $description;
+        return $this;
     }
 
     public function getWeight(): int
@@ -77,9 +80,10 @@ class Product
         return $this->weight;
     }
 
-    public function setWeight(int $weight): void
+    public function setWeight(int $weight): Product
     {
         $this->weight = $weight;
+        return $this;
     }
 
     public function getCreatedAt(): DateTime
@@ -88,9 +92,10 @@ class Product
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(): void
+    public function setCreatedAt(?DateTime $dateTime = null): Product
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = $dateTime ?? new DateTime();
+        return $this;
     }
 
     public function getUpdatedAt(): DateTime
@@ -100,9 +105,10 @@ class Product
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(): void
+    public function setUpdatedAt(?DateTime $dateTime = null): Product
     {
-        $this->updatedAt = new DateTime();
+        $this->updatedAt = $dateTime ?? new DateTime();
+        return $this;
     }
 
     public function getCategory(): Category
@@ -110,8 +116,9 @@ class Product
         return $this->category;
     }
 
-    public function setCategory(Category $category): void
+    public function setCategory(Category $category): Product
     {
         $this->category = $category;
+        return $this;
     }
 }

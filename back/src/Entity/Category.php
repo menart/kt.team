@@ -41,9 +41,10 @@ class Category
         return $this->id;
     }
 
-    public function setId(?int $id): void
+    public function setId(?int $id): Category
     {
         $this->id = $id;
+        return $this;
     }
 
     public function getName(): string
@@ -51,9 +52,10 @@ class Category
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(string $name): Category
     {
         $this->name = $name;
+        return $this;
     }
 
     public function getCreatedAt(): DateTime
@@ -62,9 +64,10 @@ class Category
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(): void
+    public function setCreatedAt(?DateTime $dateTime = null): Category
     {
-        $this->createdAt = new DateTime();
+        $this->createdAt = $dateTime ?? new DateTime();
+        return $this;
     }
 
     public function getUpdatedAt(): DateTime
@@ -74,8 +77,9 @@ class Category
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(): void
+    public function setUpdatedAt(?DateTime $dateTime = null): Category
     {
-        $this->updatedAt = new DateTime();
+        $this->updatedAt = $dateTime ?? new DateTime();
+        return $this;
     }
 }
