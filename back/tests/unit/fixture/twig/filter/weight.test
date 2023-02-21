@@ -3,8 +3,10 @@ weight return g or kg
 --TEMPLATE--
 {{ ten_g|weight }}
 {{ ten_kg|weight }}
+{{ str|weight }}
 --DATA--
-return ['ten_g' => '10', 'ten_kg' => '10000']
+return ['ten_g' => '10', 'ten_kg' => '10000', 'str' => 'not int']
 --EXPECT--
 10g
 10kg
+not int
