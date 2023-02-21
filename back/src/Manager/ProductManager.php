@@ -38,31 +38,18 @@ class ProductManager
         });
         $this->entityManager->flush();
         $count = $batchProductEntity->reduce(function (int $accumulator, Product $entity): int {
-            return null !== $accumulator + $entity->getId() ? 1 : 0;
+            return $accumulator + ($entity->getId() ? 1 : 0);
         }, 0);
         $this->entityManager->clear();
 
         return $count;
     }
 
-    public function create(string $name, string $description, int $weight, Category $category): Product
-    {
-        $product = new Product();
-        $product->setName($name);
-        $product->setDescription($description);
-        $product->setWeight($weight);
-        $product->setCategory($category);
-        $this->entityManager->persist($product);
-        $this->entityManager->flush();
-
-        return $product;
-    }
-
     /**
+     * @param int $page
+     * @param int $perPage
+     * @param FilterDto $filter
      * @return Product[]
-     * @param  int       $page
-     * @param  int       $perPage
-     * @param  FilterDto $filter
      */
     public function getProducts(int $page, int $perPage, FilterDto $filter): array
     {
@@ -93,6 +80,6 @@ class ProductManager
             return 0;
         }
 
-        return ceil($this->productRepository->getCountProducts() / $perPage);
+        return intval(ceil($this->productRepository->getCountProducts() / $perPage));
     }
 }

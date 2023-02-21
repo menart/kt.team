@@ -21,9 +21,10 @@ class ProductDto
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(string $name): ProductDto
     {
         $this->name = $name;
+        return $this;
     }
 
     public function getDescription(): string
@@ -31,9 +32,10 @@ class ProductDto
         return $this->description;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(string $description): ProductDto
     {
         $this->description = $description;
+        return $this;
     }
 
     public function getWeight(): int
@@ -41,9 +43,10 @@ class ProductDto
         return $this->weight;
     }
 
-    public function setWeight(int $weight): void
+    public function setWeight(int $weight): ProductDto
     {
         $this->weight = $weight;
+        return $this;
     }
 
     public function getCategory(): ?Category
@@ -51,9 +54,10 @@ class ProductDto
         return $this->category;
     }
 
-    public function setCategory(Category $category): void
+    public function setCategory(Category $category): ProductDto
     {
         $this->category = $category;
+        return $this;
     }
 
     public function getArray(): array

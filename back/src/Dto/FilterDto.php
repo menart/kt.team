@@ -9,11 +9,11 @@ namespace App\Dto;
  */
 class FilterDto
 {
-    public int $weightMin;
-    public int $weightMax;
+    public int $weightMin = 0;
+    public int $weightMax = 0;
     /** @var int[] */
     public array $category = [];
-    public string $query;
+    public string $query = '';
 
     public function getCategory(): string
     {
