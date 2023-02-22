@@ -63,6 +63,7 @@ abstract class AbstractImport
     protected function finishImport()
     {
         $this->saveBatchIntoDb();
+        unlink($this->fileName);
     }
 
     private function findCategory(string $categoryName): Category

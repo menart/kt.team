@@ -35,7 +35,6 @@ class XMLImport extends AbstractImport
             $this->XMLReader->next(self::NODE_PRODUCT_NAME);
         }
         $this->XMLReader->close();
-//        unlink($this->fileName);
         $this->finishImport();
 
         return $countParse;

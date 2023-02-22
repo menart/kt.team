@@ -30,12 +30,12 @@ class ProductController extends AbstractController
     #[Route(path: '', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $page = $request->get('page') ?? 0;
-        $perPage = $request->get('per-page') ?? 20;
+        $page = intval($request->get('page') ?? 0);
+        $perPage = intval($request->get('per-page') ?? 20);
         $filterDto = new FilterDto();
         $filter = json_decode($request->get('filter') ?? '[]');
-        $filterDto->weightMin = $filter->weightMin ?? 0;
-        $filterDto->weightMax = $filter->weightMax ?? 0;
+        $filterDto->weightMin = intval($filter->weightMin ?? 0);
+        $filterDto->weightMax = intval($filter->weightMax ?? 0);
         $filterDto->category = $filter->category ?? [];
         $filterDto->query = $request->get('query') ?? '';
 
