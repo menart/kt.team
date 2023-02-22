@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Manager;
 
 use App\Dto\FilterDto;
-use App\Entity\Category;
 use App\Entity\Product;
 use App\Mapper\ProductMapper;
 use App\Repository\ProductRepository;
@@ -46,8 +45,8 @@ class ProductManager
     }
 
     /**
-     * @param int $page
-     * @param int $perPage
+     * @param int       $page
+     * @param int       $perPage
      * @param FilterDto $filter
      * @return Product[]
      */

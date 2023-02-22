@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\Service;
 
 use App\Service\FileUploader;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 class FileUploaderTest extends TestCase
 {
-
     const PATH = '/www/tests/unit/fixture/';
     const FILE_TEST = 'test.xml';
     const UPLOAD_DIR = self::PATH . 'upload/';

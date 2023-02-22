@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\Manager;
 
 use App\Manager\CategoryManager;
@@ -8,7 +10,6 @@ use UnitTests\AbstractTestCase;
 
 class CategoryManagerTest extends AbstractTestCase
 {
-
     public CategoryManager $categoryManager;
 
     /**
@@ -28,7 +29,7 @@ class CategoryManagerTest extends AbstractTestCase
 
     public function testFindExistName()
     {
-        for ($i = 1; $i < 6; $i++){
+        for ($i = 1; $i < 6; $i++) {
             $findCategory = $this->categoryManager->getOrCreate(sprintf('category %d', $i));
             $this->assertEquals($i, $findCategory->getId());
         }

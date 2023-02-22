@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests;
 
 use App\Entity\Category;
@@ -14,7 +16,6 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractTestCase extends TestCase
 {
-
     /** @var ArrayCollection<Category> */
     protected ArrayCollection $categories;
     /** @var Category[] */
@@ -113,7 +114,6 @@ class AbstractTestCase extends TestCase
     protected
     function makeFakeCategoryRepository(): EntityRepository
     {
-
         $categoryRepository = $this->getMockBuilder(EntityRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -146,7 +146,6 @@ class AbstractTestCase extends TestCase
     protected
     function makeFakeProductRepository(): ProductRepository
     {
-
         $productRepository = $this->getMockBuilder(ProductRepository::class)
             ->disableOriginalConstructor()
             ->getMock();

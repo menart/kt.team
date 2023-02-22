@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\Symfony;
 
 use App\Symfony\MigrationEventSubscriber;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -25,7 +28,7 @@ class MigrationEventSubscriberTest extends TestCase
         $this->dispatcher->addListener('postGenerateSchema', [$listener, 'postGenerateSchema']);
 
         // dispatch your event here
-        $entitytManager = \Mockery::mock(EntityManager::class);
+        $entitytManager = Mockery::mock(EntityManager::class);
         $schema = new Schema();
 
         $args = new GenerateSchemaEventArgs($entitytManager, $schema);

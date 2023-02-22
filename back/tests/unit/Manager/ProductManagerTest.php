@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\Manager;
 
 use App\Dto\FilterDto;
@@ -14,7 +16,6 @@ use UnitTests\AbstractTestCase;
 
 class ProductManagerTest extends AbstractTestCase
 {
-
     private ProductManager $productManager;
 
     /**
@@ -95,7 +96,6 @@ class ProductManagerTest extends AbstractTestCase
             });
         $products = $this->productManager->getProducts(0, 50, $filterDto);
         $this->assertEqualsCanonicalizing($expectedProducts, $products);
-
     }
 
     /**
@@ -138,7 +138,7 @@ class ProductManagerTest extends AbstractTestCase
         }, $categories);
         $expectedProducts = array_filter($this->getProducts()->toArray(),
             function (Product $product) use ($findCategoryIds) {
-                return in_array($product->getCategory()->getId(), $findCategoryIds);
+                return in_array($product->getCategory()->getId(), $findCategoryIds, true);
             });
         $products = $this->productManager->getProducts(0, 50, $filterDto);
         $this->assertEqualsCanonicalizing($expectedProducts, $products);
