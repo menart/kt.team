@@ -52,7 +52,6 @@ class XMLImportTest extends AbstractTestCase
      */
     public function testEmptyParse()
     {
-        $this->products->clear();
         $this->createFakeImportFile();
         $import = new XMLImport($this->categoryManager, $this->productManager, $this->importFilePath);
         $import->parse();
@@ -67,7 +66,6 @@ class XMLImportTest extends AbstractTestCase
      */
     public function testBigParse()
     {
-        $this->products->clear();
         $this->createFakeImportFile(2500, 20);
         $import = new XMLImport($this->categoryManager, $this->productManager, $this->importFilePath);
         $import->parse();
@@ -106,5 +104,18 @@ class XMLImportTest extends AbstractTestCase
         $str .= '</products>';
 
         file_put_contents($this->importFilePath, $str);
+    }
+
+    /**
+     * @throws NotSupportedImportFileException
+     * @throws Exception
+     */
+    public function testNotFoundParse()
+    {
+        $this->products->clear();
+        $import = new XMLImport($this->categoryManager, $this->productManager, '');
+        $import->parse();
+
+        $this->assertEquals(0, count($this->getProducts()));
     }
 }
