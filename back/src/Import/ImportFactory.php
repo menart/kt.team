@@ -17,16 +17,13 @@ class ImportFactory
 {
     private CategoryManager $categoryManager;
     private ProductManager $productManager;
-    private AsyncService $asyncService;
 
     public function __construct(
         CategoryManager $categoryManager,
         ProductManager $productManager,
-        AsyncService $asyncService
     ) {
         $this->categoryManager = $categoryManager;
         $this->productManager = $productManager;
-        $this->asyncService = $asyncService;
     }
 
     public function getInstance($fileName): AbstractImport
@@ -36,7 +33,6 @@ class ImportFactory
                 return new XMLImport(
                     $this->categoryManager,
                     $this->productManager,
-                    $this->asyncService,
                     $fileName
                 );
             default:

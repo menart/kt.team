@@ -20,7 +20,6 @@ abstract class AbstractImport
 
     protected CategoryManager $categoryManager;
     protected ProductManager $productManager;
-    protected AsyncService $asyncService;
     private ArrayCollection $categories;
     private ArrayCollection $products;
     protected string $fileName;
@@ -29,12 +28,10 @@ abstract class AbstractImport
     public function __construct(
         CategoryManager $categoryManager,
         ProductManager $productManager,
-        AsyncService $asyncService,
         string $fileName
     ) {
         $this->categoryManager = $categoryManager;
         $this->productManager = $productManager;
-        $this->asyncService = $asyncService;
         $this->fileName = $fileName;
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
