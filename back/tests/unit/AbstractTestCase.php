@@ -74,8 +74,7 @@ class AbstractTestCase extends TestCase
     /**
      * @throws Exception
      */
-    protected
-    function makeFakeProductManager(): EntityManagerInterface
+    protected function makeFakeProductManager(): EntityManagerInterface
     {
         $productManager = $this->getMockBuilder(EntityManagerInterface::class)
             ->disableOriginalConstructor()
@@ -111,8 +110,7 @@ class AbstractTestCase extends TestCase
     /**
      * @throws Exception
      */
-    protected
-    function makeFakeCategoryRepository(): EntityRepository
+    protected function makeFakeCategoryRepository(): EntityRepository
     {
         $categoryRepository = $this->getMockBuilder(EntityRepository::class)
             ->disableOriginalConstructor()
@@ -143,8 +141,7 @@ class AbstractTestCase extends TestCase
     /**
      * @throws Exception
      */
-    protected
-    function makeFakeProductRepository(): ProductRepository
+    protected function makeFakeProductRepository(): ProductRepository
     {
         $productRepository = $this->getMockBuilder(ProductRepository::class)
             ->disableOriginalConstructor()
@@ -168,8 +165,7 @@ class AbstractTestCase extends TestCase
     /**
      * @throws Exception
      */
-    private
-    function makeFakeCategories()
+    protected function makeFakeCategories()
     {
         for ($i = 1; $i < 6; $i++) {
             $this->categories->add((new Category())
@@ -182,8 +178,7 @@ class AbstractTestCase extends TestCase
     /**
      * @throws Exception
      */
-    private
-    function makeFakeProducts()
+    protected function makeFakeProducts()
     {
         for ($i = 1; $i < 50; $i++) {
             $this->products->add((new Product())
@@ -200,12 +195,8 @@ class AbstractTestCase extends TestCase
      * @return ArrayCollection<Category>
      * @throws Exception
      */
-    public
-    function getCategories(): ArrayCollection
+    public function getCategories(): ArrayCollection
     {
-        if ($this->categories->count() === 0) {
-            $this->makeFakeCategories();
-        }
         return $this->categories;
     }
 
@@ -213,12 +204,8 @@ class AbstractTestCase extends TestCase
      * @return ArrayCollection<Product>
      * @throws Exception
      */
-    public
-    function getProducts(): ArrayCollection
+    public function getProducts(): ArrayCollection
     {
-        if ($this->products->count() === 0) {
-            $this->makeFakeProducts();
-        }
         return $this->products;
     }
 }

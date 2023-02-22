@@ -8,7 +8,6 @@ use App\Dto\ProductDto;
 use App\Entity\Category;
 use App\Manager\CategoryManager;
 use App\Manager\ProductManager;
-use App\Service\AsyncService;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -54,9 +53,6 @@ abstract class AbstractImport
 
     private function saveBatchIntoDb(): void
     {
-        if (empty($this->products)) {
-            return;
-        }
         if ($this->products->count() > 0) {
             $this->productManager->createBatch($this->products);
             unset($this->products);

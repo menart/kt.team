@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\Controller;
 
 use App\Controller\ImportController;
 use App\Service\AsyncService;
 use App\Service\FileUploader;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +27,10 @@ class ImportControllerTest extends WebTestCase
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function testUploadFile()
     {
-
         $fakePath = __FILE__;
 
         $symfonyUploadedFile = new SymfonyUploadedFile(

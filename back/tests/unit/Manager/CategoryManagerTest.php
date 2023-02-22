@@ -10,7 +10,7 @@ use UnitTests\AbstractTestCase;
 
 class CategoryManagerTest extends AbstractTestCase
 {
-    public CategoryManager $categoryManager;
+    private CategoryManager $categoryManager;
 
     /**
      * @throws Exception
@@ -18,6 +18,7 @@ class CategoryManagerTest extends AbstractTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->makeFakeCategories();
         $this->categoryManager = new CategoryManager($this->makeFakeCategoryManager());
     }
 

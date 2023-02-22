@@ -24,6 +24,8 @@ class ProductManagerTest extends AbstractTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->makeFakeCategories();
+        $this->makeFakeProducts();
         $this->productManager = new ProductManager($this->makeFakeProductManager(), new ProductMapper());
     }
 

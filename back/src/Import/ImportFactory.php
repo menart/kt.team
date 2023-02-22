@@ -8,7 +8,6 @@ use App\Exception\NotSupportedImportFileException;
 use App\Import\XML\XMLImport;
 use App\Manager\CategoryManager;
 use App\Manager\ProductManager;
-use App\Service\AsyncService;
 
 /**
  * Фабрика, по расширению возвращает класс для разбора импортируемого файла
