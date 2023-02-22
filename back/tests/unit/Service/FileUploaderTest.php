@@ -10,30 +10,28 @@ use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 class FileUploaderTest extends TestCase
 {
-    const PATH = '/www/tests/unit/fixture/';
-    const FILE_TEST = 'test.xml';
-    const UPLOAD_DIR = self::PATH . 'upload/';
-
     private FileUploader $fileUploader;
+    private string $path;
 
     public function setUp(): void
     {
-        $this->fileUploader = new FileUploader(self::UPLOAD_DIR);
+        $this->path = getenv('PATH_TEST');
+        $this->fileUploader = new FileUploader($this->path . getenv('UPLOAD_DIR'));
     }
 
     public function testUpload()
     {
-        $tmpfile = self::PATH . self::FILE_TEST;
+        $tmpfile = $this->path . getenv('FILE_TEST');
         file_put_contents($tmpfile, 'test');
         $symfonyUploadedFile = new SymfonyUploadedFile(
             $tmpfile,
-            self::FILE_TEST,
+            getenv('FILE_TEST'),
             'text/plan',
             null,
             true);
         $file = $this->fileUploader->upload($symfonyUploadedFile);
         $this->assertFileExists($file);
         unlink($file);
-        rmdir(self::UPLOAD_DIR);
+        rmdir($this->path . getenv('UPLOAD_DIR'));
     }
 }
