@@ -6,7 +6,9 @@ namespace App\Import;
 
 use App\Dto\ProductDto;
 use App\Entity\Category;
+use App\Entity\ImportFile;
 use App\Manager\CategoryManager;
+use App\Manager\ImportFileManager;
 use App\Manager\ProductManager;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -19,19 +21,24 @@ abstract class AbstractImport
 
     protected CategoryManager $categoryManager;
     protected ProductManager $productManager;
+    private ImportFileManager $importFileManager;
     private ArrayCollection $categories;
     private ArrayCollection $products;
+    private ImportFile $importFile;
     protected string $fileName;
     private int $count = 0;
 
     public function __construct(
         CategoryManager $categoryManager,
         ProductManager $productManager,
+        ImportFileManager $importFileManager,
         string $fileName
     ) {
         $this->categoryManager = $categoryManager;
         $this->productManager = $productManager;
+        $this->importFileManager = $importFileManager;
         $this->fileName = $fileName;
+        $this->importFile = $this->findImportFile();
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
@@ -56,13 +63,15 @@ abstract class AbstractImport
         if ($this->products->count() > 0) {
             $this->productManager->createBatch($this->products);
             unset($this->products);
+            $this->importFileManager->updateCount($this->importFile, $this->count);
         }
         $this->products = new ArrayCollection();
     }
 
-    protected function finishImport()
+    protected function finishImport(): void
     {
         $this->saveBatchIntoDb();
+        $this->importFileManager->finishUpload($this->importFile);
         unlink($this->fileName);
     }
 
@@ -82,5 +91,11 @@ abstract class AbstractImport
     protected function incCountUpload(): void
     {
         ++$this->count;
+    }
+
+    private function findImportFile(): ImportFile
+    {
+        $hash = hash_file('md5', $this->fileName);
+        return $this->importFileManager->findImportFileByHash($hash);
     }
 }

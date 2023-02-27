@@ -27,6 +27,8 @@ class ImportFile
     private DateTime $uploadAt;
     #[ORM\Column(name: 'finish_at', type: 'datetime', nullable: true)]
     private DateTime $finishAt;
+    #[ORM\Column(type: 'integer', nullable: false)]
+    private int $countRecord = 0;
 
     public function getId(): ?int
     {
@@ -66,7 +68,7 @@ class ImportFile
         return $this->uploadAt;
     }
 
-    public function setUploadAt(?DateTime $dateTime): ImportFile
+    public function setUploadAt(?DateTime $dateTime = null): ImportFile
     {
         $this->uploadAt = $dateTime ?? new DateTime();
         return $this;
@@ -77,9 +79,19 @@ class ImportFile
         return $this->finishAt;
     }
 
-    public function setFinishAt(?DateTime $dateTime): ImportFile
+    public function setFinishAt(?DateTime $dateTime = null): ImportFile
     {
         $this->finishAt = $dateTime ?? new DateTime();
         return $this;
+    }
+
+    public function getCountRecord(): int
+    {
+        return $this->countRecord;
+    }
+
+    public function setCountRecord(int $countRecord): void
+    {
+        $this->countRecord = $countRecord;
     }
 }

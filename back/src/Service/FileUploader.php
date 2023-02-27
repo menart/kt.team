@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileUploader
 {
     private string $targetDirectory;
+    private string $originalFilename;
 
     public function __construct(string $targetDirectory)
     {
@@ -23,14 +24,22 @@ class FileUploader
         if (file_exists($this->getTargetDirectory()) === false) {
             mkdir($this->getTargetDirectory());
         }
-        $originalFilename = $file->getClientOriginalName();
-        $file->move($this->getTargetDirectory(), $originalFilename);
+        $this->originalFilename = $file->getClientOriginalName();
+        $file->move($this->getTargetDirectory(), $this->originalFilename);
 
-        return $this->getTargetDirectory() . DIRECTORY_SEPARATOR . $originalFilename;
+        return $this->getTargetDirectory() . DIRECTORY_SEPARATOR . $this->originalFilename;
     }
 
     public function getTargetDirectory(): string
     {
         return $this->targetDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalFilename(): string
+    {
+        return $this->originalFilename;
     }
 }
