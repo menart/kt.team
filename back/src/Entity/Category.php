@@ -64,9 +64,9 @@ class Category
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(?DateTime $dateTime = null): Category
+    public function setCreatedAt(): Category
     {
-        $this->createdAt = $dateTime ?? new DateTime();
+        $this->createdAt = new DateTime();
         return $this;
     }
 
@@ -77,9 +77,9 @@ class Category
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(?DateTime $dateTime = null): Category
+    public function setUpdatedAt(): Category
     {
-        $this->updatedAt = $dateTime ?? new DateTime();
+        $this->updatedAt = new DateTime();
         return $this;
     }
 }

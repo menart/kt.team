@@ -46,16 +46,16 @@ class ImportFileManager
 
     public function updateCount(ImportFile $importFile, int $count): ImportFile
     {
+        $this->entityManager->find(ImportFile::class, $importFile->getId());
         $importFile->setCountRecord($count);
-        $this->entityManager->persist($importFile);
         $this->entityManager->flush();
         return $importFile;
     }
 
     public function finishUpload(ImportFile $importFile): ImportFile
     {
+        $this->entityManager->find(ImportFile::class, $importFile->getId());
         $importFile->setFinishAt();
-        $this->entityManager->persist($importFile);
         $this->entityManager->flush();
         return $importFile;
     }

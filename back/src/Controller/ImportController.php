@@ -21,7 +21,7 @@ class ImportController extends AbstractController
     private const COUNT_LAST_IMPORT_FILE = 10;
 
     private ImportFileManager $importFileManager;
-    private string $error;
+    private string $error = '';
 
     public function __construct(ImportFileManager $importFileManager)
     {
@@ -56,7 +56,7 @@ class ImportController extends AbstractController
                     AsyncService::PARSE_DATA_FILE,
                     json_encode(['pathFile' => $fileUploadPath], JSON_THROW_ON_ERROR)
                 );
-                $this->importFileManager->create($hash, $fileUploader->getOriginalFilename());
+                $this->importFileManager->create($fileUploader->getOriginalFilename(), $hash);
             }
         }
 

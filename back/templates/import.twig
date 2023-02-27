@@ -1,12 +1,45 @@
 {% extends 'base.twig' %}
 
 {% block body %}
+    {% if error is not empty %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
     <form enctype="multipart/form-data" method="post">
         <div class="mb-3">
             <label for="importFile" class="form-label">Импорт товаров</label>
-            <input type="file" class="form-control-file" id="import-file" name="import-file" aria-describedby="emailHelp">
-            <div id="importFileHelp" class="form-text">Импорт товаров - загружено {{ countUploads ?? 0 }}</div>
+            <input type="file" class="form-control-file" id="import-file" name="import-file"
+                   aria-describedby="emailHelp">
         </div>
         <button type="submit" class="btn btn-primary">Загрузить</button>
     </form>
+
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Имя файла</th>
+                    <th scope="col">Загружен</th>
+                    <th scope="col">Импортирован</th>
+                    <th scope="col">Кол-во записей</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for importFile in importFiles %}
+                    <tr {% if importFile.finishAt is empty %} class="table-info"{% endif %}>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ importFile.name }}</td>
+                        <td>{{ importFile.uploadAt | date('d.m.Y H:i:s') }}</td>
+                        <td>{{ importFile.finishAt is empty ? 'importing...' : importFile.finishAt | date('d.m.Y H:i:s') }}</td>
+                        <td>{{ importFile.countRecord }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

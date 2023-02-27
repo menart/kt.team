@@ -29,9 +29,9 @@ class XMLImport extends AbstractImport
         $this->skipRowToFisrtImplemntation(self::NODE_PRODUCT_NAME);
         while (self::NODE_PRODUCT_NAME === $this->XMLReader->name) {
             $node = new SimpleXMLElement($this->XMLReader->readOuterXml());
+            $this->incCountUpload();
             $this->parseProduct($node);
             unset($node);
-            $this->incCountUpload();
             $this->XMLReader->next(self::NODE_PRODUCT_NAME);
         }
         $this->XMLReader->close();

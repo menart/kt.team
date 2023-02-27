@@ -26,7 +26,7 @@ class ImportFile
     #[ORM\Column(name: 'upload_at', type: 'datetime', nullable: false)]
     private DateTime $uploadAt;
     #[ORM\Column(name: 'finish_at', type: 'datetime', nullable: true)]
-    private DateTime $finishAt;
+    private ?DateTime $finishAt = null;
     #[ORM\Column(type: 'integer', nullable: false)]
     private int $countRecord = 0;
 
@@ -74,7 +74,7 @@ class ImportFile
         return $this;
     }
 
-    public function getFinishAt(): DateTime
+    public function getFinishAt(): ?DateTime
     {
         return $this->finishAt;
     }

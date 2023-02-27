@@ -92,9 +92,9 @@ class Product
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(?DateTime $dateTime = null): Product
+    public function setCreatedAt(): Product
     {
-        $this->createdAt = $dateTime ?? new DateTime();
+        $this->createdAt = new DateTime();
         return $this;
     }
 
@@ -105,9 +105,9 @@ class Product
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(?DateTime $dateTime = null): Product
+    public function setUpdatedAt(): Product
     {
-        $this->updatedAt = $dateTime ?? new DateTime();
+        $this->updatedAt = new DateTime();
         return $this;
     }
 

@@ -70,19 +70,19 @@ services:
     networks:
       - kt-team-network
 
-  supervisor:
-    build: ./docker/supervisor
-    container_name: 'supervisor'
-    restart: unless-stopped
-    volumes:
-      - ${PATH_BACK}:/www
-      - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
-      - ${PATH_LOG}/supervisor:/var/log/supervisor
-      - phpsocket:/var/run
-    working_dir: /www
-    command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-    networks:
-      - kt-team-network
+#  supervisor:
+#    build: ./docker/supervisor
+#    container_name: 'supervisor'
+#    restart: unless-stopped
+#    volumes:
+#      - ${PATH_BACK}:/www
+#      - ./docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+#      - ${PATH_LOG}/supervisor:/var/log/supervisor
+#      - phpsocket:/var/run
+#    working_dir: /www
+#    command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+#    networks:
+#      - kt-team-network
 
 #Docker Networks
 networks:
