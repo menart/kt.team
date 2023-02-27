@@ -47,7 +47,7 @@ class ImportController extends AbstractController
         $fileUpload = $request->files->get('import-file');
         if (false === empty($fileUpload)) {
             $fileUploadPath = $fileUploader->upload($fileUpload);
-            $hash = hash_file('md5', $fileUploadPath);
+            $hash = $this->importFileManager->getHash($fileUploadPath);
             if ($this->importFileManager->findImportFileByHash($hash) !== null) {
                 $this->error = sprintf('%s уже был загружен ', $fileUploader->getOriginalFilename());
                 unlink($fileUploadPath);

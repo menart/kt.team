@@ -4,26 +4,32 @@ declare(strict_types=1);
 
 namespace UnitTests\Import;
 
+use App\Entity\ImportFile;
 use App\Exception\NotSupportedImportFileException;
 use App\Import\AbstractImport;
 use App\Import\ImportFactory;
 use App\Import\XML\XMLImport;
 use App\Manager\CategoryManager;
+use App\Manager\ImportFileManager;
 use App\Manager\ProductManager;
-use App\Service\AsyncService;
 use Mockery;
 use UnitTests\AbstractTestCase;
 
 class ImportFactoryTest extends AbstractTestCase
 {
     private ImportFactory $importFactory;
+    protected ImportFileManager $importFileManager;
 
     public function setUp(): void
     {
         $categoryManager = Mockery::mock(CategoryManager::class);
         $productManager = Mockery::mock(ProductManager::class);
-        $asyncService = Mockery::mock(AsyncService::class);
-        $this->importFactory = new ImportFactory($categoryManager, $productManager, $asyncService);
+        $this->importFileManager = $this->getMockBuilder(ImportFileManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->importFileManager->method('getHash')->willReturn('hash');
+        $this->importFileManager->method('findImportFileByHash')->willReturn(new ImportFile());
+        $this->importFactory = new ImportFactory($categoryManager, $productManager, $this->importFileManager);
     }
 
     public function testGetInstance()

@@ -8,6 +8,9 @@ use App\Entity\ImportFile;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Управляет информацией о загруженных файлах
+ */
 class ImportFileManager
 {
     private EntityManagerInterface $entityManager;
@@ -35,8 +38,16 @@ class ImportFileManager
         return $this->repository->findOneBy(['hash' => $hash]);
     }
 
+    public function getHash(string $filePath): string
+    {
+        if (!file_exists($filePath)) {
+            return '';
+        }
+        return md5_file($filePath);
+    }
+
     /**
-     * @param  int          $count
+     * @param  int $count
      * @return ImportFile[]
      */
     public function findLastImportFile(int $count): array

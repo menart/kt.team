@@ -7,6 +7,7 @@ namespace UnitTests\Import\XML;
 use App\Exception\NotSupportedImportFileException;
 use App\Import\XML\XMLImport;
 use App\Manager\CategoryManager;
+use App\Manager\ImportFileManager;
 use App\Manager\ProductManager;
 use App\Mapper\ProductMapper;
 use Exception;
@@ -28,9 +29,10 @@ class XMLImportTest extends AbstractTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->importFileManager = new ImportFileManager($this->makeFakeImportFileManager());
+        $this->importFilePath = getenv('PATH_TEST') . getenv('IMPORT_FILE_TEST');
         $this->productManager = new ProductManager($this->makeFakeProductManager(), new ProductMapper());
         $this->categoryManager = new CategoryManager($this->makeFakeCategoryManager());
-        $this->importFilePath = getenv('PATH_TEST') . getenv('IMPORT_FILE_TEST');
     }
 
 
@@ -40,7 +42,11 @@ class XMLImportTest extends AbstractTestCase
     public function testParse()
     {
         $this->createFakeImportFile(5, 3);
-        $import = new XMLImport($this->categoryManager, $this->productManager, $this->importFilePath);
+        $hash = $this->importFileManager->getHash($this->importFilePath);
+        $this->importFileManager->create(getenv('IMPORT_FILE_TEST'), $hash);
+        $import = new XMLImport($this->categoryManager,
+            $this->productManager, $this->importFileManager, $this->importFilePath);
+
         $import->parse();
 
         $this->assertEquals(count($this->xmlProduct), count($this->getProducts()));
@@ -53,7 +59,10 @@ class XMLImportTest extends AbstractTestCase
     public function testEmptyParse()
     {
         $this->createFakeImportFile();
-        $import = new XMLImport($this->categoryManager, $this->productManager, $this->importFilePath);
+        $hash = $this->importFileManager->getHash($this->importFilePath);
+        $this->importFileManager->create(getenv('IMPORT_FILE_TEST'), $hash);
+        $import = new XMLImport($this->categoryManager,
+            $this->productManager, $this->importFileManager, $this->importFilePath);
         $import->parse();
 
         $this->assertEquals(0, count($this->getProducts()));
@@ -67,7 +76,11 @@ class XMLImportTest extends AbstractTestCase
     public function testBigParse()
     {
         $this->createFakeImportFile(2500, 20);
-        $import = new XMLImport($this->categoryManager, $this->productManager, $this->importFilePath);
+        $hash = $this->importFileManager->getHash($this->importFilePath);
+        $this->importFileManager->create(getenv('IMPORT_FILE_TEST'), $hash);
+
+        $import = new XMLImport($this->categoryManager,
+            $this->productManager, $this->importFileManager, $this->importFilePath);
         $import->parse();
 
         $this->assertEquals(2500, count($this->getProducts()));
@@ -89,7 +102,7 @@ class XMLImportTest extends AbstractTestCase
                 'name'        => sprintf('Product %d', $i),
                 'description' => sprintf('description %d', $i),
                 'weight'      => sprintf('%d %s', rand(10, 300), (rand(0, 1) === 1 ? 'g' : 'kg')),
-                'category'    => $this->xmlCategory[rand(0, $countCategories-1)],
+                'category'    => $this->xmlCategory[rand(0, $countCategories - 1)],
             ];
         }
 
@@ -113,7 +126,10 @@ class XMLImportTest extends AbstractTestCase
     public function testNotFoundParse()
     {
         $this->products->clear();
-        $import = new XMLImport($this->categoryManager, $this->productManager, '');
+        $import = new XMLImport($this->categoryManager,
+            $this->productManager, $this->importFileManager, $this->importFilePath);
+        $hash = $this->importFileManager->getHash($this->importFilePath);
+        $this->importFileManager->create(getenv('IMPORT_FILE_TEST'), $hash);
         $import->parse();
 
         $this->assertEquals(0, count($this->getProducts()));

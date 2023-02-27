@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace UnitTests;
 
 use App\Entity\Category;
+use App\Entity\ImportFile;
 use App\Entity\Product;
+use App\Manager\ImportFileManager;
 use App\Repository\ProductRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Exception;
@@ -25,14 +28,21 @@ class AbstractTestCase extends TestCase
     /** @var Product[] */
     protected array $persistProducts = [];
 
+    /** @var ArrayCollection<ImportFile> */
+    protected ArrayCollection $importFiles;
+    /** @var ImportFile[] */
+    protected array $persistImportFiles = [];
+
+    protected ImportFileManager $importFileManager;
+
     protected EntityRepository $categoryRepository;
     protected ProductRepository $productRepository;
 
     public function setUp(): void
     {
-        parent::setUp();
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->importFiles = new ArrayCollection();
     }
 
     /**
@@ -60,7 +70,7 @@ class AbstractTestCase extends TestCase
             });
 
         $categoryManager
-            ->method('persist')
+            ->method('flush')
             ->willReturnCallback(function (): void {
                 foreach ($this->persistCategories as $category) {
                     $this->categories->add($category);
@@ -207,5 +217,87 @@ class AbstractTestCase extends TestCase
     public function getProducts(): ArrayCollection
     {
         return $this->products;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function makeFakeImportFiles()
+    {
+        $this->importFiles->clear();
+        for ($i = 1; $i < 15; $i++) {
+            $importFiles =
+                (new ImportFile())
+                    ->setId($i)
+                    ->setName(sprintf('import file %d', $i))
+                    ->setHash(md5(sprintf('hash %d', $i)))
+                    ->setUploadAt(new DateTime(sprintf('2022-02-20 23:00:%02d', $i)))
+                    ->setFinishAt()
+                    ->setCountRecord($i);
+            $this->importFiles->add($importFiles);
+        }
+    }
+
+    protected function makeFakeImportFileManager(): EntityManagerInterface
+    {
+        $importFileManager = $this->getMockBuilder(EntityManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $importFileManager->method('getRepository')
+            ->with(ImportFile::class)
+            ->willReturn($this->makeFakeImportFileRepository());
+
+        $importFileManager->method('persist')
+            ->willReturnCallback(function (ImportFile $importFile): void {
+                if ($importFile->getId() === null) {
+                    $id = $this->importFiles->count() + 1;
+                    $importFile->setId($id);
+                    $this->persistImportFiles[] = $importFile;
+                }
+            });
+
+        $importFileManager->method('find')
+            ->willReturnCallback(function ($clazz, $id):ImportFile {
+                $importFile = $this->importFiles->findFirst(function (int $key, ImportFile $importFile) use ($id) {
+                    return $importFile->getId() === $id;
+                });
+                $this->importFiles->removeElement($importFile);
+                $this->persistImportFiles[] = $importFile;
+                return $importFile;
+            });
+
+        $importFileManager->method('flush')
+            ->willReturnCallback(function (): void {
+                foreach ($this->persistImportFiles as $importFile) {
+                    $this->importFiles->add($importFile);
+                }
+                $this->persistImportFiles = [];
+            });
+
+        return $importFileManager;
+    }
+
+    protected function makeFakeImportFileRepository(): EntityRepository
+    {
+        $importFileRepository = $this->getMockBuilder(EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $importFileRepository->method('findBy')
+            ->willReturnCallback(function ($empty, $order, $count, $offset): array {
+                $criteria = new Criteria();
+                $criteria->orderBy($order)->setMaxResults($count)->setFirstResult($offset);
+                return $this->importFiles->matching($criteria)->toArray();
+            });
+
+        $importFileRepository->method('findOneBy')
+            ->willReturnCallback(function ($find): ?ImportFile {
+                return $this->importFiles->findFirst(function (int $key, ImportFile $importFile) use ($find) {
+                    return $importFile->getHash() === $find['hash'];
+                });
+            });
+
+        return $importFileRepository;
     }
 }

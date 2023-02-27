@@ -38,7 +38,9 @@ abstract class AbstractImport
         $this->productManager = $productManager;
         $this->importFileManager = $importFileManager;
         $this->fileName = $fileName;
-        $this->importFile = $this->findImportFile();
+        if (file_exists($fileName)) {
+            $this->importFile = $this->findImportFile();
+        }
         $this->categories = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
@@ -95,7 +97,7 @@ abstract class AbstractImport
 
     private function findImportFile(): ImportFile
     {
-        $hash = hash_file('md5', $this->fileName);
+        $hash = $this->importFileManager->getHash($this->fileName);
         return $this->importFileManager->findImportFileByHash($hash);
     }
 }

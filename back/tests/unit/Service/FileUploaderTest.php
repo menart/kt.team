@@ -31,6 +31,7 @@ class FileUploaderTest extends TestCase
             true);
         $file = $this->fileUploader->upload($symfonyUploadedFile);
         $this->assertFileExists($file);
+        $this->assertEquals(getenv('FILE_TEST'), $this->fileUploader->getOriginalFilename());
         unlink($file);
         rmdir($this->path . getenv('UPLOAD_DIR'));
     }

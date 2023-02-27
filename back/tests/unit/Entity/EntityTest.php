@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UnitTests\Entity;
 
 use App\Entity\Category;
+use App\Entity\ImportFile;
 use App\Entity\Product;
 use PHPUnit\Framework\TestCase;
 
@@ -56,5 +57,22 @@ class EntityTest extends TestCase
 
         $product->setCategory($category);
         $this->assertEquals($nameCategory, $product->getCategory()->getName());
+
+        $importFile = new ImportFile();
+        $this->assertEquals(0, $importFile->getCountRecord());
+        $importFile
+            ->setId(1)
+            ->setHash('hash')
+            ->setName('test')
+            ->setCountRecord(10)
+            ->setFinishAt()
+            ->setUploadAt();
+
+        $this->assertEquals(1, $importFile->getId());
+        $this->assertEquals('hash', $importFile->getHash());
+        $this->assertEquals('test', $importFile->getName());
+        $this->assertEquals(10, $importFile->getCountRecord());
+        $this->assertNotNull($importFile->getUploadAt());
+        $this->assertNotNull($importFile->getFinishAt());
     }
 }

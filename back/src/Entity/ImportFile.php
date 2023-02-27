@@ -90,8 +90,9 @@ class ImportFile
         return $this->countRecord;
     }
 
-    public function setCountRecord(int $countRecord): void
+    public function setCountRecord(int $countRecord): ImportFile
     {
         $this->countRecord = $countRecord;
+        return $this;
     }
 }
