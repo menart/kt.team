@@ -45,9 +45,9 @@ class ProductManager
     }
 
     /**
-     * @param int       $page
-     * @param int       $perPage
-     * @param FilterDto $filter
+     * @param  int       $page
+     * @param  int       $perPage
+     * @param  FilterDto $filter
      * @return Product[]
      */
     public function getProducts(int $page, int $perPage, FilterDto $filter): array
